@@ -3,3 +3,6 @@
 2. Install Expo Go from app/play store
 3. Run `npm start`
 4. Open app Expo Go and scan QR Code
+
+## Docs
+1. Firebase: https://docs.expo.dev/guides/using-firebase/

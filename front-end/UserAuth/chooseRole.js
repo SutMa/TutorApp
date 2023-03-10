@@ -14,6 +14,10 @@ const ChooseRole = () => {
     const handleButtonPress2 = () => {
         console.log("Tutor");
     };
+
+    const handleButtonPress3 = () => {
+      console.log("Admin");
+  };
   
     return (
       <View style={styles.container}>
@@ -23,6 +27,9 @@ const ChooseRole = () => {
         </Pressable>
         <Pressable style={[styles.button, {backgroundColor: '#3F3F3F80'}]} onPress={handleButtonPress2}>
         <Text style={[styles.buttonText, {flex: 1, flexWrap: 'wrap'}]}>Tutor</Text>
+        </Pressable>
+        <Pressable style={[styles.button, {backgroundColor: '#3F3F3F80'}]} onPress={handleButtonPress3}>
+        <Text style={[styles.buttonText, {flex: 1, flexWrap: 'wrap'}]}>Admin</Text>
         </Pressable>
       </View>
     );

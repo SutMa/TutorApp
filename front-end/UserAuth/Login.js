@@ -10,42 +10,23 @@ const Login = () => {
   // NOTE: setting account type
   const [emailText, setEmailText] = useState('');
   const [passwordText, setPasswordText] = useState('');
-  const [userTypeText, setUserTypeText] = useState('');
-
-  const [studentColor, setStudentColor] = useState('black');
-  const [tutorColor, setTutorColor] = useState('black');
-  const [adminColor, setAdminColor] = useState('black');
-
-  const [studentBgColor, setStudentBgColor] = useState('white');
-  const [tutorBgColor, setTutorBgColor] = useState('white');
-  const [adminBgColor, setAdminBgColor] = useState('white');
 
   const attemptLogin = async () => {
-    console.log(`Attempting login as "${userTypeText}" with { "email": "${emailText}", "password": "${passwordText}" }`);
+    console.log(`Attempting login as with { "email": "${emailText}", "password": "${passwordText}" }`);
 
-    if(!emailText || !passwordText || !userTypeText) {
+    if(!emailText || !passwordText) {
       console.error('Login was unsuccessful. All fields are required. FIXME: notify user login was unseccessful');
       return;
     }
 
     // NOTE: attempt login
-    const result = await signIn(emailText, passwordText, userTypeText);
+    const result = await signIn(emailText.toLowerCase(), passwordText);
     
     if(result) {
-      console.error('Login was successful. FIXME: route user to homepage');
+      console.error(`Login was successful as a ${result}. FIXME: route user to homepage`);
     } else {
       console.error('Login was unsuccessful. FIXME: notify user login was unseccessful');
     }
-  };
-
-  const setUserSelectButtonColor = (text) => {
-    (text === USER_TYPES.STUDENT) ? setStudentColor('white') : setStudentColor('black');
-    (text === USER_TYPES.TUTOR) ? setTutorColor('white') : setTutorColor('black');
-    (text === USER_TYPES.ADMIN) ? setAdminColor('white') : setAdminColor('black');
-
-    (text === USER_TYPES.STUDENT) ? setStudentBgColor('gray') : setStudentBgColor('white');
-    (text === USER_TYPES.TUTOR) ? setTutorBgColor('gray') : setTutorBgColor('white');
-    (text === USER_TYPES.ADMIN) ? setAdminBgColor('gray') : setAdminBgColor('white');
   };
   
   return (
@@ -81,33 +62,6 @@ const Login = () => {
         maxLength={40}
         onChangeText={text => setPasswordText(text)}>
       </TextInput>
-      <View style={{ borderWidth: 1, margin: 5 }}>
-        <RadioButtonGroup
-          containerStyle={{ margin: 10 }}
-          selected={userTypeText}
-          onSelected={(text) => {
-            setUserTypeText(text);
-            setUserSelectButtonColor(text);
-          }}
-          radioBackground="grey"
-        >
-          <RadioButtonItem style={styles.radioButton} value={USER_TYPES.STUDENT} label={
-            <Text style={{...styles.radioButtonText, color: studentColor, backgroundColor: studentBgColor }}>
-              Student
-            </Text>
-          } />
-          <RadioButtonItem style={styles.radioButton} value={USER_TYPES.TUTOR} label={
-            <Text style={{...styles.radioButtonText, color: tutorColor, backgroundColor: tutorBgColor }}>
-              Tutor
-            </Text>
-          } />
-          <RadioButtonItem style={styles.radioButton} value={USER_TYPES.ADMIN} label={
-            <Text style={{...styles.radioButtonText, color: adminColor, backgroundColor: adminBgColor }}>
-              Admin
-            </Text>
-          } />
-        </RadioButtonGroup>
-      </View>
       <Pressable style={styles.pressable} onPress={() => attemptLogin().then(() => {})}>
           <Text style={styles.Buttontext}>Submit</Text>
       </Pressable>

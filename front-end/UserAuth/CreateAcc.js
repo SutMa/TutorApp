@@ -14,11 +14,9 @@ const Login = () => {
 
   const [studentColor, setStudentColor] = useState('black');
   const [tutorColor, setTutorColor] = useState('black');
-  const [adminColor, setAdminColor] = useState('black');
 
   const [studentBgColor, setStudentBgColor] = useState('white');
   const [tutorBgColor, setTutorBgColor] = useState('white');
-  const [adminBgColor, setAdminBgColor] = useState('white');
 
   const attemptSignUp = async () => {
     console.log(`Attempting signup as "${userTypeText}" with { "email": "${emailText}", "password": "${passwordText}" }`);
@@ -38,10 +36,9 @@ const Login = () => {
       return;
     }
 
-
     try {
-      await signUp(emailText, passwordText, userTypeText);
-      console.error('Signup was successful. FIXME: route user to home screen');
+      await signUp(emailText.toLowerCase(), passwordText, userTypeText);
+      console.error(`Signup was successful as a ${userTypeText}. FIXME: route user to home screen`);
     }catch(err) {
       console.error(err);
     }
@@ -50,11 +47,9 @@ const Login = () => {
   const setUserSelectButtonColor = (text) => {
     (text === USER_TYPES.STUDENT) ? setStudentColor('white') : setStudentColor('black');
     (text === USER_TYPES.TUTOR) ? setTutorColor('white') : setTutorColor('black');
-    (text === USER_TYPES.ADMIN) ? setAdminColor('white') : setAdminColor('black');
 
     (text === USER_TYPES.STUDENT) ? setStudentBgColor('gray') : setStudentBgColor('white');
     (text === USER_TYPES.TUTOR) ? setTutorBgColor('gray') : setTutorBgColor('white');
-    (text === USER_TYPES.ADMIN) ? setAdminBgColor('gray') : setAdminBgColor('white');
   };
   
   return (
@@ -108,11 +103,6 @@ const Login = () => {
           <RadioButtonItem style={styles.radioButton} value={USER_TYPES.TUTOR} label={
             <Text style={{...styles.radioButtonText, color: tutorColor, backgroundColor: tutorBgColor }}>
               Tutor
-            </Text>
-          } />
-          <RadioButtonItem style={styles.radioButton} value={USER_TYPES.ADMIN} label={
-            <Text style={{...styles.radioButtonText, color: adminColor, backgroundColor: adminBgColor }}>
-              Admin
             </Text>
           } />
         </RadioButtonGroup>

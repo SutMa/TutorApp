@@ -20,15 +20,15 @@ export async function signUp(email, password, role){
     });
 }
 
-export async function signIn(email, password, role){
+export async function signIn(email, password){
     if(!(await docExists(USER_PATH, email))){
-        return false;
+        return null;
     }
     const user = await getDocById(USER_PATH, email);
-    if(user.password != password || user.role != role){
-        return false;
+    if(user.password != password){
+        return null;
     }
-    return true;
+    return user.role;
 }
 
 export const validateEmail = (email) => {

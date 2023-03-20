@@ -23,13 +23,13 @@ const Login = () => {
   const attemptLogin = async () => {
     console.log(`Attempting login as "${userTypeText}" with { "email": "${emailText}", "password": "${passwordText}" }`);
 
-    // NOTE: attempt login
-    const result = await signIn(emailText, passwordText, userTypeText);
-
     if(!emailText || !passwordText || !userTypeText) {
       console.error('Login was unsuccessful. All fields are required. FIXME: notify user login was unseccessful');
       return;
     }
+
+    // NOTE: attempt login
+    const result = await signIn(emailText, passwordText, userTypeText);
     
     if(result) {
       console.error('Login was successful. FIXME: route user to homepage');
@@ -108,7 +108,7 @@ const Login = () => {
           } />
         </RadioButtonGroup>
       </View>
-      <Pressable style={styles.pressable} onPress={attemptLogin}>
+      <Pressable style={styles.pressable} onPress={() => attemptLogin().then(() => {})}>
           <Text style={styles.Buttontext}>Submit</Text>
       </Pressable>
     </View>

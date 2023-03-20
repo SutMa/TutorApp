@@ -1,5 +1,11 @@
 import { createDoc, createDocById, getDocById, docExists } from '../firebaseCrud';
+
 const USER_PATH = 'user';
+export const USER_TYPES = {
+    STUDENT: 'student',
+    ADMIN: 'admin',
+    TUTOR: 'tutor',
+}
 
 export async function signUp(email, password, role){
     if(!docExists(USER_PATH, email)){

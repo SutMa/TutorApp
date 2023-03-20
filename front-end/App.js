@@ -5,6 +5,7 @@ import Login from './UserAuth/Login';
 import CreateAcc from './UserAuth/CreateAcc';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import ChooseRole from './UserAuth/ChooseRole';
 import { signUp, signIn } from './controllers/auth/user'
 
 

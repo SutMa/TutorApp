@@ -9,7 +9,7 @@ const CreateAcc = () => {
     <View style={styles.container}>
       <Text style={styles.title}>Create account</Text>
       <Text style={styles.createAccount}>
-        Have an account?{' '}
+        Have an account?
         <TouchableOpacity onPress={() => navigation.navigate('Login')}>
           <Text style={styles.link}>Login here</Text>
         </TouchableOpacity></Text>

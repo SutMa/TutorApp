@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Pressable, View, TextInput, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { signUp, USER_TYPES, validateEmail, validatePassword } from '../controllers/auth/user';
+import { signUp, USER_TYPES, validateEmail, validatePassword, clearUserStorage, saveUserStorage } from '../controllers/auth/user';
 import { initTimeSchedule } from '../controllers/tutor/tutorController';
 import RadioButtonGroup, { RadioButtonItem } from "expo-radio-button";
 import { AUTH_ROUTES } from '../Routes';
@@ -19,6 +19,11 @@ const Login = () => {
 
   const [studentBgColor, setStudentBgColor] = useState('white');
   const [tutorBgColor, setTutorBgColor] = useState('white');
+
+  // NOTE: clearing local user storage
+  useEffect(() => {
+    clearUserStorage().then(() => {});
+  }, []);
 
   const attemptSignUp = async () => {
     console.log(`Attempting signup as "${userTypeText}" with { "email": "${emailText}", "password": "${passwordText}" }`);
@@ -47,6 +52,12 @@ const Login = () => {
       if(userTypeText == USER_TYPES.TUTOR) {
         await initTimeSchedule(caseInsensitiveEmail);
       }
+
+      // NOTE: setting local storage
+      await saveUserStorage({
+        email: emailText,
+        role: userTypeText,
+      });
 
       navigation.replace('Root');
     }catch(err) {

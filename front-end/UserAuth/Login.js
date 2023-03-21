@@ -27,7 +27,7 @@ const Login = () => {
     // NOTE: attempt login
     const result = await signIn(emailText.toLowerCase(), passwordText);
     if(result) {
-    // NOTE: setting local storage
+      // NOTE: setting local storage
       await saveUserStorage({
         email: emailText,
         role: result,

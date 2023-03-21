@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Pressable, View, TextInput, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { signIn } from '../controllers/auth/user';
+import { AUTH_ROUTES } from '../Routes';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -22,8 +23,7 @@ const Login = () => {
     const result = await signIn(emailText.toLowerCase(), passwordText);
     
     if(result) {
-      console.error(`Login was successful as a ${result}. FIXME: route user to homepage`);
-      navigation.navigate('Home', { userType: result });
+      navigation.replace('Root');
     } else {
       console.error('Login was unsuccessful. FIXME: notify user login was unseccessful');
     }
@@ -36,7 +36,7 @@ const Login = () => {
         <Text style={styles.createAccount}>
           New user?{' '}
         </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('CreateAcc')}>
+        <TouchableOpacity onPress={() => navigation.navigate(AUTH_ROUTES.CREATE_ACCOUNT)}>
             <Text style={styles.link}>Create an account</Text>
           </TouchableOpacity>
       </View>

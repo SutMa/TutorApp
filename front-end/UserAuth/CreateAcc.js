@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { signUp, USER_TYPES, validateEmail, validatePassword } from '../controllers/auth/user';
 import { initTimeSchedule } from '../controllers/tutor/tutorController';
 import RadioButtonGroup, { RadioButtonItem } from "expo-radio-button";
+import { AUTH_ROUTES } from '../Routes';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -39,15 +40,15 @@ const Login = () => {
 
     try {
       const caseInsensitiveEmail = emailText.toLowerCase();
+
       await signUp(caseInsensitiveEmail, passwordText, userTypeText);
 
       // NOTE: initializing schedule
       if(userTypeText == USER_TYPES.TUTOR) {
-        console.log("TEST");
         await initTimeSchedule(caseInsensitiveEmail);
       }
 
-      console.error(`Signup was successful as a ${userTypeText}. FIXME: route user to home screen`);
+      navigation.replace('Root');
     }catch(err) {
       console.error(err);
     }
@@ -68,7 +69,7 @@ const Login = () => {
         <Text style={styles.createAccount}>
           Already a user?{' '}
         </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+        <TouchableOpacity onPress={() => navigation.navigate(AUTH_ROUTES.LOGIN)}>
             <Text style={styles.link}>Login into an account</Text>
           </TouchableOpacity>
       </View>
@@ -129,7 +130,7 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
       alignItems: 'center',
       justifyContent: 'center',
-      paddingBottom: 100,
+      paddingBottom: 0,
     },
     radioButton: {
       margin: 5,

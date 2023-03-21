@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Pressable, View, TextInput, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { signIn, USER_TYPES } from '../controllers/auth/user';
-import RadioButtonGroup, { RadioButtonItem } from "expo-radio-button";
+import { signIn } from '../controllers/auth/user';
 
 const Login = () => {
   const navigation = useNavigation();

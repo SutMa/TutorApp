@@ -31,8 +31,12 @@ export async function signIn(email, password){
     return user.role;
 }
 
+const validateLSUEmail = (email) => {
+    return email.length >= 7 && (email.slice(-7) == 'lsu.edu');
+}
+
 export const validateEmail = (email) => {
-    return String(email)
+    return validateLSUEmail(email) && String(email)
       .toLowerCase()
       .match(
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/

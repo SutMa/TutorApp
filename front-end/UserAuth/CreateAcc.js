@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Pressable, View, TextInput, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { signUp, USER_TYPES, validateEmail, validatePassword } from '../controllers/auth/user';
+import { initTimeSchedule } from '../controllers/tutor/tutorController';
 import RadioButtonGroup, { RadioButtonItem } from "expo-radio-button";
 
 const Login = () => {
@@ -37,7 +38,15 @@ const Login = () => {
     }
 
     try {
-      await signUp(emailText.toLowerCase(), passwordText, userTypeText);
+      const caseInsensitiveEmail = emailText.toLowerCase();
+      await signUp(caseInsensitiveEmail, passwordText, userTypeText);
+
+      // NOTE: initializing schedule
+      if(userTypeText == USER_TYPES.TUTOR) {
+        console.log("TEST");
+        await initTimeSchedule(caseInsensitiveEmail);
+      }
+
       console.error(`Signup was successful as a ${userTypeText}. FIXME: route user to home screen`);
     }catch(err) {
       console.error(err);

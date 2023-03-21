@@ -3,8 +3,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function Footer() {
   return (
-    <View style={{flex: 1}}>
-      <View style={styles.container}>
+    <View style={{...styles.container, flex: 1}}>
         <Pressable style={styles.pressable}>
           <Ionicons name="md-calendar" size={32} color="black" />
         </Pressable>
@@ -14,7 +13,6 @@ export default function Footer() {
         <Pressable style={styles.pressable}>
           <Ionicons name="md-settings" size={32} color="black" />
         </Pressable>
-      </View>
     </View>
   );
 }

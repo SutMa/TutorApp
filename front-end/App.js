@@ -1,12 +1,12 @@
 import './controllers/auth/initFirebase';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
-import Login from './UserAuth/Login';
-import CreateAcc from './UserAuth/CreateAcc';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import ChooseRole from './UserAuth/ChooseRole';
-import { signUp, signIn } from './controllers/auth/user'
+
+import Home from './View/Home';
+import Login from './UserAuth/Login';
+import CreateAcc from './UserAuth/CreateAcc';
 
 
 const Stack = createStackNavigator();
@@ -15,8 +15,9 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="CreateAcc" component={CreateAcc} />
+        <Stack.Screen name='Login' component={Login} />
+        <Stack.Screen name='Create Account' component={CreateAcc} />
+        <Stack.Screen name='Home' component={Home} />
       </Stack.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>

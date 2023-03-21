@@ -23,6 +23,7 @@ const Login = () => {
     
     if(result) {
       console.error(`Login was successful as a ${result}. FIXME: route user to homepage`);
+      navigation.navigate('Home', { userType: result });
     } else {
       console.error('Login was unsuccessful. FIXME: notify user login was unseccessful');
     }

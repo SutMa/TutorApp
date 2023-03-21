@@ -1,5 +1,5 @@
 import { db } from './auth/initFirebase';
-import { collection, addDoc, getDocs, deleteDoc, getDoc, doc, updateDoc, setDoc } from 'firebase/firestore';
+import { collection, addDoc, getDocs, deleteDoc, getDoc, doc, updateDoc, setDoc, query, where } from 'firebase/firestore';
 
 export async function getDocById(path, docId){
     const docRef = doc(db, path, docId);
@@ -26,6 +26,22 @@ export async function getAllDoc(path){
             id: result.id,
         });
     });
+    return docs;
+}
+
+export async function queryAllDoc(path, queryParam){
+    const docs = [];
+    const collectionRef = collection(db, path);
+    const q = query(collectionRef, queryParam);
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach((doc) => {
+        docs.push({
+            id: doc.id,
+            ...doc.data(),
+        });
+    })
+
     return docs;
 }
 

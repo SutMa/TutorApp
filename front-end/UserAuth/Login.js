@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Pressable, View, TextInput, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { signIn } from '../controllers/auth/user';
+import { signIn, clearUserStorage, saveUserStorage } from '../controllers/auth/user';
 import { AUTH_ROUTES } from '../Routes';
 
 const Login = () => {
@@ -10,6 +10,11 @@ const Login = () => {
   // NOTE: setting account type
   const [emailText, setEmailText] = useState('');
   const [passwordText, setPasswordText] = useState('');
+
+  // NOTE: clearing local user storage
+  useEffect(() => {
+    clearUserStorage().then(() => {});
+  }, []);
 
   const attemptLogin = async () => {
     console.log(`Attempting login as with { "email": "${emailText}", "password": "${passwordText}" }`);
@@ -21,8 +26,12 @@ const Login = () => {
 
     // NOTE: attempt login
     const result = await signIn(emailText.toLowerCase(), passwordText);
-    
     if(result) {
+    // NOTE: setting local storage
+      await saveUserStorage({
+        email: emailText,
+        role: result,
+      });
       navigation.replace('Root');
     } else {
       console.error('Login was unsuccessful. FIXME: notify user login was unseccessful');

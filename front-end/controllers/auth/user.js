@@ -1,12 +1,25 @@
-import { createDoc, createDocById, getDocById, docExists } from '../firebaseCrud';
+import { createDocById, getDocById, docExists, queryAllDoc } from '../firebaseCrud';
+import {  where } from 'firebase/firestore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const USER_PASSWORD_MIN_SIZE = 8;
 const USER_PATH = 'user';
+export const USER_TOKEN = 'user';
 
 export const USER_TYPES = {
     STUDENT: 'student',
     ADMIN: 'admin',
     TUTOR: 'tutor',
+}
+
+export const getAllTutors = async () => {
+    const result = await queryAllDoc(USER_PATH, where('role', '==', USER_TYPES.TUTOR));
+    return result;
+}
+
+export const getAllUsers = async () => {
+    const result = await queryAllDoc(USER_PATH, where('role', '!=', USER_TYPES.ADMIN));
+    return result;
 }
 
 export async function signUp(email, password, role){
@@ -45,4 +58,17 @@ export const validateEmail = (email) => {
 
 export const validatePassword = (password) => {
     return password.length >= USER_PASSWORD_MIN_SIZE;
+}
+
+export const clearUserStorage = async () => {
+    await AsyncStorage.clear();
+}
+
+export const saveUserStorage = async (user) => {
+    await AsyncStorage.setItem(USER_TOKEN, JSON.stringify(user));
+}
+
+export const getUserStorage = async () => {
+    const result = AsyncStorage.getItem(USER_TOKEN);
+    return result;
 }

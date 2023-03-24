@@ -1,25 +1,22 @@
 import { Text } from 'react-native';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { clearUserStorage } from '../controllers/auth/user';
 import { TouchableOpacity, StyleSheet, View  } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-//get user name function
 
-// const [username, setUsername] = useState('');
+const getAllKeys = async () => {
+  try {
+    const keys = await AsyncStorage.getAllKeys();
+    console.log(keys);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-// const getUsername = async () => {
-//   const storedUsername = await AsyncStorage.getItem('username');
-//   if (storedUsername) {
-//     setUsername(storedUsername);
-//   }
-// };
 
-// useEffect(() => {
-//   getUsername();
-// }, []);
 
 const styles = StyleSheet.create({
   container: {
@@ -40,7 +37,7 @@ const styles = StyleSheet.create({
     color: '#000',
     textAlign: 'center',
   },
-  text: {
+  welcome: {
     fontSize: 24,
     fontWeight: 'bold', // make the text bold
     color: 'red', // set the text color to red
@@ -48,26 +45,43 @@ const styles = StyleSheet.create({
   },
 });
 
-
-
 export default function LoginButton() {
-    const navigation = useNavigation();
+  const navigation = useNavigation();
+  const [username, setUsername] = useState('');
 
-    const handleLoginNavigation = async () => {
-      await clearUserStorage(); 
-      navigation.navigate('Login');
-    };
+  const getUsername = async () => {
+    const storedUsername = await AsyncStorage.getItem('user');
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+  };
 
-    return (
-      <View style={styles.container}>
-        <Text style={styles.text}>Welcome, username!</Text>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={handleLoginNavigation}
-        >
-          <Text style={styles.buttonText}>Logout</Text>
-        </TouchableOpacity>
-      </View>
-    );
+  useEffect(() => {
+    getUsername();
+  }, []);
 
-  }
+  const start = username.indexOf(":") + 2; // get the first word after ':' 
+  const end = username.indexOf(","); // until the ','
+
+  const usernameM = username.substring(start, end-1); // get the word between them 
+
+  const handleLoginNavigation = async () => {
+    await clearUserStorage();
+    navigation.navigate('Login');
+  };
+
+
+
+  return (
+    //getAllKeys(),
+    <View style={styles.container}>
+      <Text style={styles.welcome}>Welcome, {usernameM}!</Text>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={handleLoginNavigation}
+      >
+        <Text style={styles.buttonText}>Logout</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}

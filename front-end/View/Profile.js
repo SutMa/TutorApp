@@ -87,7 +87,7 @@ export default function LoginButton() {
   const role = username;
 
   const handleLoginNavigation = async () => {
-    await clearUserStorage().then((res) => console.log(res)).catch((err) => console.error(err));
+    // await clearUserStorage().then((res) => console.log(res)).catch((err) => console.error(err));
     navigation.navigate('Login');
   };
 

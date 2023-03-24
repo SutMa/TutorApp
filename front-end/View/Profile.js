@@ -1,20 +1,21 @@
-import { Text } from 'react-native';
+import { Text, Image } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { clearUserStorage } from '../controllers/auth/user';
+import { getUserStorage } from '../controllers/auth/user';
 import { TouchableOpacity, StyleSheet, View  } from 'react-native';
 
 
 
-const getAllKeys = async () => {
-  try {
-    const keys = await AsyncStorage.getAllKeys();
-    console.log(keys);
-  } catch (error) {
-    console.log(error);
-  }
-};
+// const getAllKeys = async () => {
+//   try {
+//     const keys = await AsyncStorage.getAllKeys();
+//     console.log(keys);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
 
 
@@ -43,6 +44,18 @@ const styles = StyleSheet.create({
     color: 'red', // set the text color to red
     marginBottom: 20, // add margin to the bottom
   },
+  image: {
+    width: 200,
+    height: 200,
+    resizeMode: 'contain', // adjust the image size and aspect ratio
+    marginVertical: 10, // add margin to the top and bottom
+  },
+  role: {
+    color: 'blue',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginVertical: 10,
+  },
 });
 
 export default function LoginButton() {
@@ -50,9 +63,13 @@ export default function LoginButton() {
   const [username, setUsername] = useState('');
 
   const getUsername = async () => {
-    const storedUsername = await AsyncStorage.getItem('user');
-    if (storedUsername) {
-      setUsername(storedUsername);
+    try {
+      const storedUsername = await AsyncStorage.getItem('user');
+      if (storedUsername) {
+        setUsername(storedUsername);
+      }
+    } catch (error) {
+      console.log('Error getting username:', error);
     }
   };
 
@@ -65,10 +82,19 @@ export default function LoginButton() {
 
   const usernameM = username.substring(start, end-1); // get the word between them 
 
+
+
+  const role = username;
+
   const handleLoginNavigation = async () => {
-    await clearUserStorage();
+    await clearUserStorage().then((res) => console.log(res)).catch((err) => console.error(err));
     navigation.navigate('Login');
   };
+
+  const Rolestart = role.indexOf(",") + 8; // get the first character after '"role": "'
+  const Roleend = role.lastIndexOf('}'); // until the last '"'
+  const role2 = role.substring(Rolestart, Roleend); // get the substring between them 
+  
 
 
 
@@ -76,6 +102,9 @@ export default function LoginButton() {
     //getAllKeys(),
     <View style={styles.container}>
       <Text style={styles.welcome}>Welcome, {usernameM}!</Text>
+      
+      <Image source={require('../assets/Nahida.jpg')} style={styles.image} />
+      <Text style={styles.role}>Role: {role2}</Text>
       <TouchableOpacity
         style={styles.button}
         onPress={handleLoginNavigation}

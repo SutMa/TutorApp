@@ -66,6 +66,7 @@ export const clearUserStorage = async () => {
 
 export const saveUserStorage = async (user) => {
     await AsyncStorage.setItem(USER_TOKEN, JSON.stringify(user));
+    await AsyncStorage.setItem(USER_TOKEN, JSON.stringify(user));
 }
 
 export const getUserStorage = async () => {

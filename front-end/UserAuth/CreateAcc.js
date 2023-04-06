@@ -76,7 +76,7 @@ const Login = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Create Account</Text>
-      <View style={{flexDirection: 'row', alignSelf: 'flex-start', paddingLeft: 57}}>
+      <View style={{flexDirection: 'row', alignSelf: 'flex-start', paddingLeft: 75}}>
         <Text style={styles.createAccount}>
           Already a user?{' '}
         </Text>

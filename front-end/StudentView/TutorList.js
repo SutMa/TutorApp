@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Text, StyleSheet, Pressable, View } from 'react-native';
+import { Text, StyleSheet, Pressable, View, Image } from 'react-native';
 import { getAllTutors } from '../controllers/auth/user';
+
 
 export default function TutorList() {
     const [tutors, setTutors] = useState(undefined);
@@ -21,14 +22,19 @@ export default function TutorList() {
         tutorsElement.push(
             <View key={i}>
                 <Pressable style={styles.pressable}>
-                    <Text>{ tutors[i].id }</Text>
+                    <Text style={styles.names}>{ tutors[i].id }</Text>
+                    <Text style={styles.subjects}>subject</Text>
+                    <View style={styles.ratingNum}>
+                        <Text style={styles.rating}>4.5</Text>
+                    </View>
+                    <Image source={require('../assets/Nahida.jpg')} style={styles.profiles}/>
                 </Pressable>
             </View>
         );
     }
 
     return(
-        <View>
+        <View style={styles.container}>
             { tutorsElement }
         </View>
     );
@@ -36,13 +42,65 @@ export default function TutorList() {
 
 const styles = StyleSheet.create({
     pressable: {
-        borderWidth: 1,
-        width: 280,
-        height: 60,
+        width: 360,
+        height: 80,
         padding: 10,
-        margin: 5,
-        borderRadius: 3,
-        fontSize: 18,
+        margin: 10,
+        backgroundColor: '#FFF',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+    
+        elevation: 5,
+        borderRadius: '15px',
+    },
+    container: {
+        margin: 50,
+        flex: 1,
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+    },
+    names: {
+        fontSize: 21,
         textAlign: 'center',
-    }
+        display: 'inline-block',
+    },
+    profiles: {
+        position: 'relative',
+        display: 'inline-block',
+        bottom: '122.5%',
+        width: 60,
+        height: 60,
+        resizeMode: 'contain',
+    },
+    subjects: {
+        fontSize: 15,
+        margin: 5,
+        color: '#484848',
+        textAlign: 'center',
+        display: 'inline-block',
+    },
+    rating: {
+        width: 21,
+        height: 20,
+        bottom: '160%',
+        left: '85%',
+        backgroundColor: '#484848',
+        borderRadius: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: '#FFF',
+    },
+    ratingNum: {
+        textAlign: 'center',
+        fontSize: 16,
+        color: '#FFF',
+    },
+    options: {
+
+    },
 });

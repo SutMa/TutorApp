@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Text, StyleSheet, Pressable, View, Image } from 'react-native';
+import { Text, StyleSheet, Pressable, View, Image, ScrollView, LayoutAnimation } from 'react-native';
 import { getAllTutors } from '../controllers/auth/user';
+
+
 
 
 export default function TutorList() {
@@ -19,6 +21,7 @@ export default function TutorList() {
 
     const tutorsElement = []
     for(let i = 0; i < tutors.length; i++){
+        //const [openDropdown, setOpenDropdown] = useState(null);
         tutorsElement.push(
             <View key={i}>
                 <Pressable style={styles.pressable}>
@@ -27,16 +30,24 @@ export default function TutorList() {
                     <View style={styles.ratingNum}>
                         <Text style={styles.rating}>4.5</Text>
                     </View>
+                    <Text style={styles.options}>⋮</Text>
                     <Image source={require('../assets/Nahida.jpg')} style={styles.profiles}/>
                 </Pressable>
+                {/* {isOpen && (
+                    <View style={styles.dropdownContainer}>
+                        {dropdownContent}
+                    </View>
+                )} */}
             </View>
         );
     }
 
     return(
-        <View style={styles.container}>
-            { tutorsElement }
-        </View>
+        <ScrollView>
+            <View style={styles.container}>
+                { tutorsElement }
+            </View>
+        </ScrollView>
     );
 }
 
@@ -72,10 +83,11 @@ const styles = StyleSheet.create({
     profiles: {
         position: 'relative',
         display: 'inline-block',
-        bottom: '122.5%',
+        bottom: '155%',
         width: 60,
         height: 60,
         resizeMode: 'contain',
+        borderRadius: '50%'
     },
     subjects: {
         fontSize: 15,
@@ -90,10 +102,11 @@ const styles = StyleSheet.create({
         bottom: '160%',
         left: '85%',
         backgroundColor: '#484848',
-        borderRadius: '100%',
+        borderRadius: '50%',
         alignItems: 'center',
         justifyContent: 'center',
         color: '#FFF',
+
     },
     ratingNum: {
         textAlign: 'center',
@@ -101,6 +114,15 @@ const styles = StyleSheet.create({
         color: '#FFF',
     },
     options: {
+        textAlign: 'center',
+        justifyContent: 'center',
+        left: '47%',
+        bottom: '85%',
+        fontSize: '23',
+        fontStyle: 'bold',
+        color: '#000',
+    },
+    dropdownContent: {
 
     },
 });

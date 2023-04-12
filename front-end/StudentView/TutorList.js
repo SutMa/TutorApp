@@ -74,7 +74,11 @@ export default function TutorList() {
           const startHour = 8;
           let currentHour = 0;
 
+          availableButtons.push(
+            <Text key={day} >{ day }</Text>
+          );
           tutor.days[day].forEach(hour => {
+
             if(hour === HOUR_STATUS.AVAILABLE) {
 
               let hour = startHour + currentHour;

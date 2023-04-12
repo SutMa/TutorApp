@@ -10,6 +10,7 @@ export default function TimeSchedule() {
   const [schedule, setSchedule] = useState(undefined);
   const [numHours, setNumHours]  = useState(undefined);
   const [email, setEmail] = useState(undefined);
+  const [isOpen, setIsOpen] = useState(Array(Object.keys(DAYS).length).fill(false));
 
   const ButtonStateColor = {
     [HOUR_STATUS.AVAILABLE]: 'green',
@@ -53,6 +54,23 @@ export default function TimeSchedule() {
     }
 
     return ButtonStateColor.OTHER;
+  }
+
+  const dayToNumber = (day) => {
+    switch(day){
+      case DAYS.MONDAY:
+        return 0;
+      case DAYS.TUESDAY:
+        return 1;
+      case DAYS.WEDNESDAY:
+        return 2;
+      case DAYS.THURSDAY:
+        return 3;
+      case DAYS.FRIDAY:
+        return 4;
+      default:
+        console.error('unknown day!');
+    }
   }
 
   const updateSchedule = () => {
@@ -144,7 +162,6 @@ export default function TimeSchedule() {
        
       dropdownContent.push(
         <View key={ indexscheduleColors } style={styles.dropdownContent}>
-          <Text style={styles.dropdownHeadertext}>Select times you are available: </Text>
           <ScrollView contentContainerStyle={styles.timeList}>
             <View style={styles.timeRow}>
               <Text style={styles.timeText}>{ hourText }:00 { hourTextSuffix } - { nextHourText }:00 { nextHourTextSuffix }</Text>
@@ -162,20 +179,24 @@ export default function TimeSchedule() {
       currentHour++;
     });
 
-
-    const isOpen = true;
+    const handleIsOpen = (day) => {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut); 
+      const newIsOpen = [...isOpen];
+      newIsOpen[dayToNumber(day)] = !newIsOpen[dayToNumber(day)];
+      setIsOpen(newIsOpen);
+    }
     
     timeButtons.push(
       <View key={ currentDay } style={[styles.dayContainer, styles.openContainer]}>
         <View style={styles.dayHeader}>
           <Text style={styles.dayText}>{ currentDay }</Text>
           <Pressable onPress={() => {
-            LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut); 
+            handleIsOpen(currentDay);
           }}>
-            <Text style={styles.dropdown}>{isOpen ? '▼' : '◀'}</Text>
+            <Text style={styles.dropdown}>{isOpen[dayToNumber(currentDay)] ? '▼' : '◀'}</Text>
           </Pressable>
         </View>
-        {isOpen && (
+        {isOpen[dayToNumber(currentDay)] && (
           <View style={styles.dropdownContainer}>
             {dropdownContent}
           </View>
@@ -286,7 +307,6 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     width: '100%',
   },
-
   timeText: {
     fontSize: 16,
   },
@@ -295,6 +315,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 10,
+    width: '80%',
   },
   box: {
     width: 20,
@@ -302,7 +323,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderWidth: 1,
     borderColor: 'black',
-    marginLeft: 100,
   },
   text: {
     color: 'black',

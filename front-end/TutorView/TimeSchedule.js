@@ -11,6 +11,7 @@ export default function TimeSchedule() {
   const [numHours, setNumHours]  = useState(undefined);
 
   const handlePress = (index) => {
+    console.log(index);
     const newIsPressed = [...isPressed];
     newIsPressed[index] = !newIsPressed[index];
     setIsPressed(newIsPressed);
@@ -26,6 +27,7 @@ export default function TimeSchedule() {
 
         setMyScheduleObject(scheduleObject);
         setNumHours(hours);
+
         setIsPressed(Array(hours * Object.keys(DAYS).length).fill(false));
       });
     });
@@ -49,8 +51,6 @@ export default function TimeSchedule() {
     let startHour = 8;
 
     days[currentDay].forEach((hourStatus) => {
-      console.log(hourStatus);
-
       if(hourStatus !== HOUR_STATUS.AVAILABLE && hourStatus !== HOUR_STATUS.NOT_AVAILABLE) {
         console.log('appointment');
       }
@@ -61,6 +61,8 @@ export default function TimeSchedule() {
       let nextHour = hour + 1;
       let nextHourText = (nextHour % 12 == 0) ? '12' : `${nextHour % 12}`;
       let nextHourTextSuffix = (nextHour >= 12) ? 'PM' : 'AM';
+
+      let indexIsPressed = (currentDayNumber * numHours) + currentHour;
        
       dropdownContent.push(
         <View style={styles.dropdownContent}>
@@ -68,8 +70,8 @@ export default function TimeSchedule() {
           <ScrollView contentContainerStyle={styles.timeList}>
             <View style={styles.timeRow}>
               <Text style={styles.timeText}>{ hourText }:00 { hourTextSuffix } - { nextHourText }:00 { nextHourTextSuffix }</Text>
-              <TouchableOpacity onPress={() => handlePress(currentDayNumber * currentHour * numHours)}>
-                <View style={[styles.box, styles.boxPressed]}>
+              <TouchableOpacity onPress={() => handlePress(indexIsPressed)}>
+                <View style={[styles.box, isPressed[indexIsPressed] && styles.boxPressed]}>
                 </View>
               </TouchableOpacity>
             </View>

@@ -6,7 +6,6 @@ import {DAYS, getTimeScheduleById, HOUR_STATUS} from "../controllers/tutor/tutor
 export default function UserAppointments() {
     const [user, setUser] = useState(undefined);
     const [schedule, setSchedule] = useState(undefined);
-    console.log(user);
 
     useEffect(() => {
         getUserStorage().then((userJSON) => {
@@ -17,11 +16,13 @@ export default function UserAppointments() {
               const { id, ...days } = schedule;
               setSchedule(days);
             });
-        }
-    )}, []);
+        });
+    }, []);
 
     if(schedule === undefined || user === undefined) {
-      <Text>Loading</Text>
+      return(
+        <Text>Loading</Text>
+      );
     }
 
     const appointments = [];
@@ -34,7 +35,6 @@ export default function UserAppointments() {
       schedule[day].forEach(status => {
         if(status !== HOUR_STATUS.AVAILABLE && status !== HOUR_STATUS.NOT_AVAILABLE) {
           let hour = startHour + currentHour;
-          let hourIndexText = `${currentHour}`;
           let hourTextSuffix = (hour >= 12) ? 'PM' : 'AM';
           let hourText = (hour % 12 == 0) ? '12' : `${hour % 12}`; 
           let nextHour = hour + 1;

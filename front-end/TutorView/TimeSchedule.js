@@ -217,7 +217,11 @@ export default function TimeSchedule() {
     </View>
     <View>
     <Pressable onPress={updateSchedule}>
-      <Text>Submit</Text>
+      <View style={styles.buttonContainer}>
+          <Pressable style={styles.button} onPress={updateSchedule}>
+            <Text style={styles.buttonText}>Submit</Text>
+          </Pressable>
+        </View>
     </Pressable>
     </View>
     </ScrollView>
@@ -276,9 +280,10 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   dayText: {
+    textTransform: 'capitalize',
     fontSize: 20,
     fontWeight: 'bold',
-    paddingLeft: 20,
+    paddingLeft: 15,
   },
   dropdown: {
     fontSize: 28,
@@ -287,18 +292,15 @@ const styles = StyleSheet.create({
     marginBottom:10,
     textDecorationLine: 'underline',
     fontSize: 15,
-
   },
   dropdownContainer: {
-    width: '100%',
+    width: '95%',
     paddingTop: 10,
   },
   dropdownContent: {
     flexDirection: 'column',
-    alignItems: 'flex-start',
     justifyContent: 'flex-start',
     marginTop: 10,
-    marginLeft: 30,
   },
   timeContainer: {
     flexDirection: 'row',
@@ -309,13 +311,14 @@ const styles = StyleSheet.create({
   },
   timeText: {
     fontSize: 16,
+    marginRight:0,
+    marginLeft: 10,
   },
   timeRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
+    justifyContent: 'space-between',
     marginBottom: 10,
-    width: '80%',
   },
   box: {
     width: 20,
@@ -323,8 +326,25 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderWidth: 1,
     borderColor: 'black',
+    marginRight: 15,
   },
   text: {
     color: 'black',
+  },
+  buttonContainer: {
+    alignItems: 'center',
+
+    marginBottom:30,
+  },
+  button: {
+    backgroundColor: '#007AFF',
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });

@@ -1,14 +1,14 @@
 import { View, StyleSheet, Text, Pressable } from 'react-native';
 import { ScrollView, TouchableOpacity, LayoutAnimation} from 'react-native';
 import { useEffect, useState } from 'react';
-
+import { getUserStorage } from '../controllers/auth/user';
+import { DAYS, getTimeScheduleById, HOUR_STATUS } from '../controllers/tutor/tutorController'; 
 
 export default function TimeSchedule() {
-  const SCHEDULE_WIDTH = 5;
-
-  const [openDropdown, setOpenDropdown] = useState(null);
-
-  const [isPressed, setIsPressed] = useState(Array(8).fill(false));
+  const [openDropdown, setOpenDropdown] = useState(false);
+  const [isPressed, setIsPressed] = useState(undefined);
+  const [myScheduleObject, setMyScheduleObject] = useState(undefined);
+  const [numHours, setNumHours]  = useState(undefined);
 
   const handlePress = (index) => {
     const newIsPressed = [...isPressed];
@@ -16,84 +16,80 @@ export default function TimeSchedule() {
     setIsPressed(newIsPressed);
   };
 
+  useEffect(() => {
+    getUserStorage().then((userJSON) => {
+      const user = JSON.parse(userJSON);
+      const email = user.email;
+
+      getTimeScheduleById(email).then((scheduleObject) => {
+        const hours = scheduleObject.monday.length;
+
+        setMyScheduleObject(scheduleObject);
+        setNumHours(hours);
+        setIsPressed(Array(hours * Object.keys(DAYS).length).fill(false));
+      });
+    });
+  }, []);
+
+  if(myScheduleObject === undefined || isPressed === undefined || numHours === undefined) {
+    return (
+      <Text>Loading</Text>
+    );
+  }
 
   const timeButtons = [];
-  const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+  const { id, ...days} = myScheduleObject;
+  let currentDayNumber = 0;
 
-  for(let i = 0; i < SCHEDULE_WIDTH; i++) {
-    const isOpen = openDropdown === i;
-    const dropdownContent = (
-      <View style={styles.dropdownContent}>
-        <Text style={styles.dropdownHeadertext}>Select times you are available: </Text>
-        <ScrollView contentContainerStyle={styles.timeList}>
-          <View style={styles.timeRow}>
-            <Text style={styles.timeText}>8:00 AM - 9:00 AM</Text>
-            <TouchableOpacity onPress={() => handlePress(i * 8)}>
-              <View style={[styles.box, isPressed[i * 8] && styles.boxPressed]}>
-              </View>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.timeRow}>
-            <Text style={styles.timeText}>9:00 AM - 10:00 AM</Text>
-            <TouchableOpacity onPress={() => handlePress(i * 8 + 1)}>
-              <View style={[styles.box, isPressed[i * 8 + 1] && styles.boxPressed]}>
-              </View>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.timeRow}>
-            <Text style={styles.timeText}>10:00 AM - 11:00 AM</Text>
-            <TouchableOpacity onPress={() => handlePress(i * 8 + 2)}>
-              <View style={[styles.box, isPressed[i * 8 + 2] && styles.boxPressed]}>
-              </View>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.timeRow}>
-            <Text style={styles.timeText}>11:00 AM - 12:00 PM</Text>
-            <TouchableOpacity onPress={() => handlePress(i * 8 + 3)}>
-              <View style={[styles.box, isPressed[i * 8 + 3] && styles.boxPressed]}>
-              </View>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.timeRow}>
-            <Text style={styles.timeText}>12:00 PM - 1:00 PM</Text>
-            <TouchableOpacity onPress={() => handlePress(i * 8 + 4)}>
-              <View style={[styles.box, isPressed[i * 8 + 4] && styles.boxPressed]}>
-              </View>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.timeRow}>
-            <Text style={styles.timeText}>1:00 PM - 2:00 PM</Text>
-            <TouchableOpacity onPress={() => handlePress(i * 8 + 5)}>
-              <View style={[styles.box, isPressed[i * 8 + 5] && styles.boxPressed]}>
-              </View>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.timeRow}>
-            <Text style={styles.timeText}>3:00 PM - 4:00 PM</Text>
-            <TouchableOpacity onPress={() => handlePress(i * 8 + 6)}>
-              <View style={[styles.box, isPressed[i * 8 + 6] && styles.boxPressed]}>
-              </View>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.timeRow}>
-            <Text style={styles.timeText}>4:00 PM - 5:00 PM</Text>
-            <TouchableOpacity onPress={() => handlePress(i * 8 + 7)}>
-              <View style={[styles.box, isPressed[i * 8 + 7] && styles.boxPressed]}>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-      </View>
-    );
+  Object.keys(DAYS).forEach((key) => {
+    const currentDay = DAYS[key];
+    const dropdownContent = [];
+
+    let currentHour = 0;
+    let startHour = 8;
+
+    days[currentDay].forEach((hourStatus) => {
+      console.log(hourStatus);
+
+      if(hourStatus !== HOUR_STATUS.AVAILABLE && hourStatus !== HOUR_STATUS.NOT_AVAILABLE) {
+        console.log('appointment');
+      }
+      
+      let hour = startHour + currentHour;
+      let hourTextSuffix = (hour >= 12) ? 'PM' : 'AM';
+      let hourText = (hour % 12 == 0) ? '12' : `${hour % 12}`; 
+      let nextHour = hour + 1;
+      let nextHourText = (nextHour % 12 == 0) ? '12' : `${nextHour % 12}`;
+      let nextHourTextSuffix = (nextHour >= 12) ? 'PM' : 'AM';
+       
+      dropdownContent.push(
+        <View style={styles.dropdownContent}>
+          <Text style={styles.dropdownHeadertext}>Select times you are available: </Text>
+          <ScrollView contentContainerStyle={styles.timeList}>
+            <View style={styles.timeRow}>
+              <Text style={styles.timeText}>{ hourText }:00 { hourTextSuffix } - { nextHourText }:00 { nextHourTextSuffix }</Text>
+              <TouchableOpacity onPress={() => handlePress(currentDayNumber * currentHour * numHours)}>
+                <View style={[styles.box, styles.boxPressed]}>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        </View>
+      );
+
+      currentHour++;
+    });
+
+
+    const isOpen = true;
     
-
     timeButtons.push(
-      <View key={`${weekdays[i]}`} style={[styles.dayContainer, isOpen && styles.openContainer]}>
+      <View key={ currentDay } style={[styles.dayContainer, styles.openContainer]}>
         <View style={styles.dayHeader}>
-          <Text style={styles.dayText}>{weekdays[i]}</Text>
+          <Text style={styles.dayText}>{ currentDay }</Text>
           <Pressable onPress={() => {
             LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut); 
-            setOpenDropdown(isOpen ? null : i)
+            setOpenDropdown(isOpen)
           }}>
             <Text style={styles.dropdown}>{isOpen ? '▼' : '◀'}</Text>
           </Pressable>
@@ -105,7 +101,9 @@ export default function TimeSchedule() {
         )}
       </View>
     );
-  }
+
+    currentDayNumber++;
+  });
 
   return (
     <ScrollView>

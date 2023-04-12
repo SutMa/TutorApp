@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Text } from 'react-native';
 import { getUserStorage, USER_TYPES } from '../controllers/auth/user';
 import TutorList from '../StudentView/TutorList';
+import UserAppointments from '../TutorView/UserAppointments';
 import UserList from '../AdminView/UserList';
 
 export default function Home() {
@@ -24,7 +25,7 @@ export default function Home() {
     switch(user.role){
         case USER_TYPES.TUTOR:
             return(
-                <Text>Tutor View </Text>
+               <UserAppointments /> 
             );
             break;
         case USER_TYPES.ADMIN:

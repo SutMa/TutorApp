@@ -2,19 +2,17 @@ import { useEffect, useState } from 'react';
 import { Text, StyleSheet, Pressable, View, Image, ScrollView, LayoutAnimation } from 'react-native';
 import { getAllTutors } from '../controllers/auth/user';
 
-
-
-
 export default function TutorList() {
     const [tutors, setTutors] = useState(undefined);
     const [openDropdown, setOpenDropdown] = useState(null);
 
     useEffect(() => {
-        // tutor.id is the email
-        getAllTutors().then((result) => setTutors(result));
+        getAllTutors().then((result) => {
+            setTutors(result);
+        });
     }, []);
 
-    if(!tutors) {
+    if(tutors === undefined) {
         return(
             <Text>Loading</Text>
         )
@@ -77,7 +75,7 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
     
         elevation: 5,
-        borderRadius: '15px',
+        borderRadius: 15,
     },
     container: {
         margin: 50,
@@ -88,23 +86,20 @@ const styles = StyleSheet.create({
     names: {
         fontSize: 21,
         textAlign: 'center',
-        display: 'inline-block',
     },
     profiles: {
         position: 'relative',
-        display: 'inline-block',
         bottom: '175%',
         width: 60,
         height: 60,
         resizeMode: 'contain',
-        borderRadius: '50%'
+        borderRadius: 50,
     },
     subjects: {
         fontSize: 15,
         margin: 5,
         color: '#484848',
         textAlign: 'center',
-        display: 'inline-block',
         fontStyle: 'italic',
     },
     rating: {
@@ -129,7 +124,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         left: '48%',
         bottom: '103%',
-        fontSize: '23',
+        fontSize: 23,
         fontStyle: 'bold',
         color: '#000',
     },

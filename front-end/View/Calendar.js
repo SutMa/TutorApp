@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Text } from 'react-native';
 import { getUserStorage, USER_TYPES } from '../controllers/auth/user';
 import TimeSchedule from '../TutorView/TimeSchedule';
-
+import Appointments from '../StudentView/Appointments';
 
 export default function Calendar() {
     const [user, setUser] = useState(undefined);
@@ -34,7 +34,7 @@ export default function Calendar() {
             break;
         case USER_TYPES.STUDENT: 
             return(
-                <Text>Student View</Text>
+                <Appointments />
             );
             break;
         default:

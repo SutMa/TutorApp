@@ -10,7 +10,6 @@ export default function Home() {
 
     useEffect(() => {
         getUserStorage().then((result) => {
-            console.log(JSON.stringify(result));
             setUser(JSON.parse(result));
         }
 )}, []);

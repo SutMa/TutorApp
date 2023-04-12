@@ -45,11 +45,9 @@ export default function Appointments() {
             let nextHourTextSuffix = (nextHour >= 12) ? 'PM' : 'AM';
 
             days[day].forEach((status) => {
-                console.log(status);
-                console.log(email);
                 if(status === email) {
                     myAppointmentsElement.push(
-                        <Text>TutorName: { id } | Time { hourText }:{ hourTextSuffix }-{ nextHourText }:{ nextHourTextSuffix }</Text>
+                        <Text key={`${day}-${hour}`}>{ day }TutorName: { id } | Time { hourText }:{ hourTextSuffix }-{ nextHourText }:{ nextHourTextSuffix }</Text>
                     );
                 }
 

@@ -37,17 +37,19 @@ export default function Appointments() {
             let currentHour = 0;
             const startHour = 8;
 
-            let hour = startHour + currentHour;
-            let hourTextSuffix = (hour >= 12) ? 'PM' : 'AM';
-            let hourText = (hour % 12 == 0) ? '12' : `${hour % 12}`; 
-            let nextHour = hour + 1;
-            let nextHourText = (nextHour % 12 == 0) ? '12' : `${nextHour % 12}`;
-            let nextHourTextSuffix = (nextHour >= 12) ? 'PM' : 'AM';
 
             days[day].forEach((status) => {
                 if(status === email) {
+                    let hour = startHour + currentHour;
+                    let hourTextSuffix = (hour >= 12) ? 'PM' : 'AM';
+                    let hourText = (hour % 12 == 0) ? '12' : `${hour % 12}`; 
+                    let nextHour = hour + 1;
+                    let nextHourText = (nextHour % 12 == 0) ? '12' : `${nextHour % 12}`;
+                    let nextHourTextSuffix = (nextHour >= 12) ? 'PM' : 'AM';
+
+                    console.log(hourText);
                     myAppointmentsElement.push(
-                        <Text key={`${day}-${hour}`}>{ day }TutorName: { id } | Time { hourText }:{ hourTextSuffix }-{ nextHourText }:{ nextHourTextSuffix }</Text>
+                        <Text key={`${day}-${currentHour}`}>{ day }TutorName: { id } | Time { hourText }:{ hourTextSuffix }-{ nextHourText }:{ nextHourTextSuffix }</Text>
                     );
                 }
 

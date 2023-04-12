@@ -1,29 +1,107 @@
 import { useEffect, useState } from 'react';
-import { Text, StyleSheet, Pressable, View, Image, ScrollView, LayoutAnimation } from 'react-native';
-import { getAllTutors } from '../controllers/auth/user';
+import { Alert, Button, Text, StyleSheet, Pressable, View, Image, ScrollView, LayoutAnimation } from 'react-native';
+import { getAllTutors, getUserStorage } from '../controllers/auth/user';
+import { DAYS, getTimeScheduleById, HOUR_STATUS, setTimeSchedule } from '../controllers/tutor/tutorController'; 
+import { useNavigation } from '@react-navigation/native';
 
 export default function TutorList() {
+    const navigation = useNavigation();
     const [tutors, setTutors] = useState(undefined);
     const [openDropdown, setOpenDropdown] = useState(null);
+    const [user, setUser] = useState(undefined);
 
     useEffect(() => {
-        getAllTutors().then((result) => {
-            setTutors(result);
+        getAllTutors().then((tutors) => {
+            const innerTutors = [];
+
+            tutors.forEach((tutor) => {
+              getTimeScheduleById(tutor.id).then((schedule) => {
+                const { id, ...days } = schedule;
+
+                innerTutors.push({
+                  id: tutor.id,
+                  days: days,
+                });
+
+                setTutors(innerTutors);
+              });
+            });
         });
+
+        getUserStorage().then((result) => {
+            setUser(JSON.parse(result));
+        });
+
     }, []);
 
-    if(tutors === undefined) {
+    if(user === undefined || tutors === undefined) {
         return(
             <Text>Loading</Text>
         )
     }
 
+    const createAppointment = (tutor, day, hourIndex, printTime) => {
+      Alert.alert('Schedule Appointment', `Are you sure you want to schedule an appointment at ${printTime} with ${tutor}?`, [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {text: 'Yes', onPress: () => {
+          getTimeScheduleById(tutor).then((schedule) => {
+            const { id: tutorId, ...days} = schedule;
+            
+            days[day][Number(hourIndex)] = user.email; 
+
+            setTimeSchedule(tutor, days)
+              .then(() => {
+                console.log(`Appointment created successfully`);
+                navigation.navigate('Calendar');
+              })
+              .catch(err => console.error(err));
+          });
+        }},
+      ]);
+    }
+
     const tutorsElement = []
     for(let i = 0; i < tutors.length; i++){
+        const tutor = tutors[i];
+        const availableButtons = [];
+
+        Object.keys(DAYS).forEach(key => {
+          const day = DAYS[key];
+          const startHour = 8;
+          let currentHour = 0;
+
+          tutor.days[day].forEach(hour => {
+            if(hour === HOUR_STATUS.AVAILABLE) {
+
+              let hour = startHour + currentHour;
+              let hourIndexText = `${currentHour}`;
+              let hourTextSuffix = (hour >= 12) ? 'PM' : 'AM';
+              let hourText = (hour % 12 == 0) ? '12' : `${hour % 12}`; 
+              let nextHour = hour + 1;
+              let nextHourText = (nextHour % 12 == 0) ? '12' : `${nextHour % 12}`;
+              let nextHourTextSuffix = (nextHour >= 12) ? 'PM' : 'AM';
+              let printTime = `${hourText} ${hourTextSuffix}-${nextHourText} ${nextHourTextSuffix}`;
+            
+              availableButtons.push(
+                <Button key={ `${tutor.id}-${day}-${currentHour}` }onPress={() => {
+                  createAppointment(tutor.id, day, hourIndexText, printTime);
+                }} title={ printTime }></Button>
+              );
+            }
+
+            currentHour++;
+          });
+        });
+
         const isOpen = openDropdown === i;
         const dropdownContent = (
             <View style={styles.dropdownContent}>
                 <Text style={styles.dropdownHeader}>Available Times</Text>
+                { availableButtons }
             </View>
         );
 

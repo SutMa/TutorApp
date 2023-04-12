@@ -2,45 +2,127 @@ import { View, StyleSheet, Text, Pressable } from 'react-native';
 import { ScrollView, TouchableOpacity, LayoutAnimation} from 'react-native';
 import { useEffect, useState } from 'react';
 import { getUserStorage } from '../controllers/auth/user';
-import { DAYS, getTimeScheduleById, HOUR_STATUS } from '../controllers/tutor/tutorController'; 
+import { DAYS, setTimeSchedule, getTimeScheduleById, HOUR_STATUS } from '../controllers/tutor/tutorController'; 
 
 export default function TimeSchedule() {
-  const [openDropdown, setOpenDropdown] = useState(false);
-  const [isPressed, setIsPressed] = useState(undefined);
-  const [myScheduleObject, setMyScheduleObject] = useState(undefined);
+  //NOTE: array of colors representating status of the hour
+  const [scheduleColors, setScheduleColors] = useState(undefined);
+  const [schedule, setSchedule] = useState(undefined);
   const [numHours, setNumHours]  = useState(undefined);
+  const [email, setEmail] = useState(undefined);
+
+  const ButtonStateColor = {
+    [HOUR_STATUS.AVAILABLE]: 'green',
+    [HOUR_STATUS.NOT_AVAILABLE]: 'white',
+    OTHER: 'orange',
+  }
 
   const handlePress = (index) => {
-    console.log(index);
-    const newIsPressed = [...isPressed];
-    newIsPressed[index] = !newIsPressed[index];
-    setIsPressed(newIsPressed);
+    const newscheduleColors = [...scheduleColors];
+
+    if(scheduleColors[index] === ButtonStateColor[HOUR_STATUS.NOT_AVAILABLE]) {
+      newscheduleColors[index] = ButtonStateColor[HOUR_STATUS.AVAILABLE];
+      console.log(newscheduleColors[index]);
+    } else if(scheduleColors[index] == ButtonStateColor[HOUR_STATUS.AVAILABLE]) {
+      newscheduleColors[index] = ButtonStateColor[HOUR_STATUS.NOT_AVAILABLE];
+    } else {
+      console.error('there is an appointment at this time');
+    }
+
+    setScheduleColors(newscheduleColors);
   };
+
+  const colorToSchedule = (color) => {
+    if(color === ButtonStateColor[HOUR_STATUS.NOT_AVAILABLE]){
+      return HOUR_STATUS.NOT_AVAILABLE;
+    } 
+    if(color === ButtonStateColor[HOUR_STATUS.AVAILABLE]) {
+      return HOUR_STATUS.AVAILABLE;
+    }
+
+    //FIXME: should return user id or som?
+    return HOUR_STATUS.OTHER;
+  }
+
+  const scheduleToColor = (status) => {
+    if(status === HOUR_STATUS.NOT_AVAILABLE) {
+      return ButtonStateColor[HOUR_STATUS.NOT_AVAILABLE];
+    }
+    if(status === HOUR_STATUS.AVAILABLE) {
+      return ButtonStateColor[HOUR_STATUS.AVAILABLE];
+    }
+
+    return ButtonStateColor.OTHER;
+  }
+
+  const updateSchedule = () => {
+    let currentIndex = 0;
+    let newSchedule = {
+      [DAYS.MONDAY]: [],
+      [DAYS.TUESDAY]: [],
+      [DAYS.WEDNESDAY]: [],
+      [DAYS.THURSDAY]: [],
+      [DAYS.FRIDAY]: [],
+    };
+
+    Object.keys(DAYS).forEach((key) => {
+      for(let i = 0; i < numHours; i++) {
+        const day = DAYS[key];
+        const color = colorToSchedule(scheduleColors[currentIndex]);
+
+        if(scheduleColors[currentIndex] === ButtonStateColor.OTHER) {
+          const userId = schedule[day][i];
+          newSchedule[day].push(userId);
+        } else {
+          newSchedule[day].push(color);
+        }
+
+        currentIndex++;
+      }
+    });
+
+    setTimeSchedule(email, newSchedule)
+      .then(res => console.log('schedule submitted successfully'))
+      .catch(err => console.error(err));
+  }
 
   useEffect(() => {
     getUserStorage().then((userJSON) => {
       const user = JSON.parse(userJSON);
-      const email = user.email;
+      const innerEmail = user.email;
 
-      getTimeScheduleById(email).then((scheduleObject) => {
+      setEmail(innerEmail);
+
+      getTimeScheduleById(innerEmail).then((scheduleObject) => {
         const hours = scheduleObject.monday.length;
+        const { id, ...days } = scheduleObject;
 
-        setMyScheduleObject(scheduleObject);
+        
+        setSchedule(days);
         setNumHours(hours);
+        
+        const hourArray = [];
 
-        setIsPressed(Array(hours * Object.keys(DAYS).length).fill(false));
+        Object.keys(DAYS).forEach((key) => {
+          const day = DAYS[key];
+          scheduleObject[day].forEach(status => {
+            hourArray.push(scheduleToColor(status));
+          });
+        });
+          
+        setScheduleColors(hourArray);
       });
     });
   }, []);
 
-  if(myScheduleObject === undefined || isPressed === undefined || numHours === undefined) {
+  if(schedule === undefined || email === undefined || schedule === undefined || scheduleColors === undefined || numHours === undefined) {
     return (
       <Text>Loading</Text>
     );
   }
 
   const timeButtons = [];
-  const { id, ...days} = myScheduleObject;
+  const { id, ...days} = schedule;
   let currentDayNumber = 0;
 
   Object.keys(DAYS).forEach((key) => {
@@ -50,11 +132,7 @@ export default function TimeSchedule() {
     let currentHour = 0;
     let startHour = 8;
 
-    days[currentDay].forEach((hourStatus) => {
-      if(hourStatus !== HOUR_STATUS.AVAILABLE && hourStatus !== HOUR_STATUS.NOT_AVAILABLE) {
-        console.log('appointment');
-      }
-      
+    days[currentDay].forEach(() => {
       let hour = startHour + currentHour;
       let hourTextSuffix = (hour >= 12) ? 'PM' : 'AM';
       let hourText = (hour % 12 == 0) ? '12' : `${hour % 12}`; 
@@ -62,16 +140,18 @@ export default function TimeSchedule() {
       let nextHourText = (nextHour % 12 == 0) ? '12' : `${nextHour % 12}`;
       let nextHourTextSuffix = (nextHour >= 12) ? 'PM' : 'AM';
 
-      let indexIsPressed = (currentDayNumber * numHours) + currentHour;
+      let indexscheduleColors = (currentDayNumber * numHours) + currentHour;
        
       dropdownContent.push(
-        <View style={styles.dropdownContent}>
+        <View key={ indexscheduleColors } style={styles.dropdownContent}>
           <Text style={styles.dropdownHeadertext}>Select times you are available: </Text>
           <ScrollView contentContainerStyle={styles.timeList}>
             <View style={styles.timeRow}>
               <Text style={styles.timeText}>{ hourText }:00 { hourTextSuffix } - { nextHourText }:00 { nextHourTextSuffix }</Text>
-              <TouchableOpacity onPress={() => handlePress(indexIsPressed)}>
-                <View style={[styles.box, isPressed[indexIsPressed] && styles.boxPressed]}>
+              <TouchableOpacity onPress={() => handlePress(indexscheduleColors)}>
+                <View style={{...styles.box, ...{
+                  backgroundColor: scheduleColors[indexscheduleColors]}
+                }}>
                 </View>
               </TouchableOpacity>
             </View>
@@ -91,7 +171,6 @@ export default function TimeSchedule() {
           <Text style={styles.dayText}>{ currentDay }</Text>
           <Pressable onPress={() => {
             LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut); 
-            setOpenDropdown(isOpen)
           }}>
             <Text style={styles.dropdown}>{isOpen ? '▼' : '◀'}</Text>
           </Pressable>
@@ -114,6 +193,11 @@ export default function TimeSchedule() {
       <View style={styles.dayBox}>
         {timeButtons}
       </View>
+    </View>
+    <View>
+    <Pressable onPress={updateSchedule}>
+      <Text>Submit</Text>
+    </Pressable>
     </View>
     </ScrollView>
   );
@@ -219,9 +303,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'black',
     marginLeft: 100,
-  },
-  boxPressed: {
-    backgroundColor: 'green',
   },
   text: {
     color: 'black',

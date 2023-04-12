@@ -11,8 +11,8 @@ export const DAYS = {
 }
 
 export const HOUR_STATUS = {
-    NOT_AVAILABLE: 1,
-    AVAILABLE: 2,
+    NOT_AVAILABLE: '1',
+    AVAILABLE: '2',
 }
 
 export const initTimeSchedule = async (email) => {

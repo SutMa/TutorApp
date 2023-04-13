@@ -35,7 +35,7 @@ export default function Appointments() {
             const day = DAYS[key];
 
             let currentHour = 0;
-            const startHour = 8;
+            const startHour = 9;
 
 
             days[day].forEach((status) => {

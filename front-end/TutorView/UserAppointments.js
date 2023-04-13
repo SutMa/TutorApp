@@ -30,7 +30,7 @@ export default function UserAppointments() {
     Object.keys(DAYS).forEach(key => {
       const day = DAYS[key];
       let currentHour = 0;
-      let startHour = 8;
+      let startHour = 9;
 
       schedule[day].forEach(status => {
         if(status !== HOUR_STATUS.AVAILABLE && status !== HOUR_STATUS.NOT_AVAILABLE) {

@@ -6,7 +6,7 @@ import { USER_PATH, USER_TYPES } from "../controllers/auth/user";
 import { getTimeScheduleById, DAYS, HOUR_STATUS, setTimeSchedule} from "../controllers/tutor/tutorController";
 
 export default function AddAppointment() {
-  const hours = ['8 AM', '9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM', '5 PM'];
+  const hours = ['9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM'];
   const days = [DAYS.MONDAY, DAYS.TUESDAY, DAYS.WEDNESDAY, DAYS.THURSDAY, DAYS.FRIDAY];
  
   const [currentDay, setCurrentDay] = useState(DAYS.MONDAY);
@@ -73,7 +73,7 @@ export default function AddAppointment() {
         onChangeText={text => setStudentEmail(text)}>
       </TextInput>
       <Text>Select the day and time</Text>
-      <View style={[styles.container, {
+      <View style={[{
         flexDirection: 'row',
       }]}>
         <ScrollView>
@@ -120,8 +120,3 @@ export default function AddAppointment() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-  },
-});

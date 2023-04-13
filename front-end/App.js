@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -51,9 +51,9 @@ function RootAdmin() {
           tabBarInactiveTintColor: 'gray',
         })}>
       <Tab.Screen name={ADMIN_HOME_ROUTES.REMOVE_APPOINTMENT} component={RemoveAppointment} options={{ unmountOnBlur: true}} />
-      <Tab.Screen name={ADMIN_HOME_ROUTES.ADD_APPOINTMENT} component={AddAppointment} options={{ unmountOnBlur: true}} />
-      <Tab.Screen name={ADMIN_HOME_ROUTES.EDIT_APPOINTMENT} component={EditAppointment} options={{ unmountOnBlur: true}} />
-      <Tab.Screen name={ADMIN_HOME_ROUTES.PROFILE} component={Profile} options={{ unmountOnBlur: true}} />      
+      <Tab.Screen name={ADMIN_HOME_ROUTES.ADD_APPOINTMENT} component={AddAppointment} />
+      <Tab.Screen name={ADMIN_HOME_ROUTES.EDIT_APPOINTMENT} component={EditAppointment} />
+      <Tab.Screen name={ADMIN_HOME_ROUTES.PROFILE} component={Profile} />      
     </Tab.Navigator>
   )
 }
@@ -90,7 +90,7 @@ function RootUsers() {
         })}>
       <Tab.Screen name={HOME_ROUTES.HOME} component={Home} options={{ unmountOnBlur: true}} />
       <Tab.Screen name={HOME_ROUTES.CALENDAR} component={Calendar} options={{ unmountOnBlur: true}} />
-      <Tab.Screen name={HOME_ROUTES.PROFILE} component={Profile} options={{ unmountOnBlur: true}} />      
+      <Tab.Screen name={HOME_ROUTES.PROFILE} component={Profile} />      
     </Tab.Navigator>
   )
 }

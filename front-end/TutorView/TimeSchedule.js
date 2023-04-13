@@ -148,7 +148,7 @@ export default function TimeSchedule() {
     const dropdownContent = [];
 
     let currentHour = 0;
-    let startHour = 8;
+    let startHour = 9;
 
     days[currentDay].forEach(() => {
       let hour = startHour + currentHour;

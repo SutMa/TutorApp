@@ -51,7 +51,7 @@ export default function RemoveAppointment() {
       Object.keys(DAYS).forEach(key => {
         const day = DAYS[key];
 
-        const startHour = 8;
+        const startHour = 9;
         let currentHour = 0;
 
         schedule[day].forEach(status => {

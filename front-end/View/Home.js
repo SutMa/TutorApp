@@ -27,17 +27,14 @@ export default function Home() {
             return(
                <UserAppointments /> 
             );
-            break;
         case USER_TYPES.ADMIN:
             return(
                 <UserList />
             );
-            break;
         case USER_TYPES.STUDENT: 
             return(
                 <TutorList />
             );
-            break;
         default:
             console.error('unknown role');
     }

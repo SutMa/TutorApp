@@ -10,7 +10,7 @@ export default function TutorList() {
     const [openDropdown, setOpenDropdown] = useState(null);
     const [user, setUser] = useState(undefined);
 
-    useEffect(() => {
+    const refreshSchedules = () => {
         getAllTutors().then((tutors) => {
             const innerTutors = [];
 
@@ -27,11 +27,14 @@ export default function TutorList() {
               });
             });
         });
+    }
+
+    useEffect(() => {
+        refreshSchedules();
 
         getUserStorage().then((result) => {
             setUser(JSON.parse(result));
         });
-
     }, []);
 
     if(user === undefined || tutors === undefined) {
@@ -56,7 +59,8 @@ export default function TutorList() {
             setTimeSchedule(tutor, days)
               .then(() => {
                 console.log(`Appointment created successfully`);
-                navigation.navigate('Calendar');
+
+                refreshSchedules();
               })
               .catch(err => console.error(err));
           });

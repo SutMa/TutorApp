@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Text, View } from 'react-native'; 
+import { Text, View, StyleSheet, ScrollView, SafeAreaView} from 'react-native'; 
 import { getUserStorage } from "../controllers/auth/user";
 import {DAYS, getTimeScheduleById, HOUR_STATUS} from "../controllers/tutor/tutorController";
 
@@ -42,7 +42,10 @@ export default function UserAppointments() {
           let nextHourTextSuffix = (nextHour >= 12) ? 'PM' : 'AM';
 
           appointments.push(
-            <Text>{ `You have an appointment with ${status} at ${hourText} ${hourTextSuffix}-${nextHourText} ${nextHourTextSuffix}` }</Text>
+            <View>
+              <Text style={styles.innerBox}>{ `You have an appointment with ${status} at ${hourText} ${hourTextSuffix}-${nextHourText} ${nextHourTextSuffix}` }</Text>
+            </View>
+            
           );
         }
 
@@ -51,8 +54,31 @@ export default function UserAppointments() {
     });
 
     return(
-      <View>
+      <View style={styles.container}>
         { appointments }
       </View>
     );
 }
+  
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'column',
+    backgroundColor: "gray",
+    opacity: 0.5,
+    borderRadius: 10,
+    flex: 1,
+    padding: 10,
+  },
+  ScrollView: {
+    
+  },
+
+ innerBox: {
+    
+
+
+  }
+
+  
+  
+});

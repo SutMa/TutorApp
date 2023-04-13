@@ -26,12 +26,6 @@ export default function LoginButton() {
     );
   }
 
-  if(user.role === USER_TYPES.ADMIN) {
-    return (
-      <EditAppointment />
-    );
-  }
-
   return (
     <View style={styles.container}>
       <Text style={styles.welcome}>Welcome, { user.email }!</Text>

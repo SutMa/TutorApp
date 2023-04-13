@@ -59,7 +59,7 @@ const Login = () => {
         role: userTypeText,
       });
 
-      navigation.replace('Root');
+      navigation.replace(AUTH_ROUTES.ROOT_USERS);
     }catch(err) {
       console.error(err);
     }

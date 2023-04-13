@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Pressable, View, TextInput, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { signIn, clearUserStorage, saveUserStorage } from '../controllers/auth/user';
+import { signIn, clearUserStorage, saveUserStorage, USER_TYPES } from '../controllers/auth/user';
 import { AUTH_ROUTES } from '../Routes';
 
 const Login = () => {
@@ -34,7 +34,12 @@ const Login = () => {
         email: emailTextLower,
         role: result,
       });
-      navigation.replace('Root');
+
+      if(result === USER_TYPES.ADMIN) {
+        navigation.replace(AUTH_ROUTES.ROOT_ADMIN);
+      } else {
+        navigation.replace(AUTH_ROUTES.ROOT_USERS);
+      }
     } else {
       console.error('Login was unsuccessful. FIXME: notify user login was unseccessful');
     }

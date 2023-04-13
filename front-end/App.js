@@ -44,9 +44,9 @@ function Root() {
           tabBarActiveTintColor: 'black',
           tabBarInactiveTintColor: 'gray',
         })}>
-      <Tab.Screen name={HOME_ROUTES.HOME} component={Home} />
-      <Tab.Screen name={HOME_ROUTES.CALENDAR} component={Calendar} />
-      <Tab.Screen name={HOME_ROUTES.PROFILE} component={Profile} />      
+      <Tab.Screen name={HOME_ROUTES.HOME} component={Home} options={{ unmountOnBlur: true}} />
+      <Tab.Screen name={HOME_ROUTES.CALENDAR} component={Calendar} options={{ unmountOnBlur: true}} />
+      <Tab.Screen name={HOME_ROUTES.PROFILE} component={Profile} options={{ unmountOnBlur: true}} />      
     </Tab.Navigator>
   )
 }

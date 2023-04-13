@@ -3,7 +3,7 @@ import { Text } from 'react-native';
 import { getUserStorage, USER_TYPES } from '../controllers/auth/user';
 import TutorList from '../StudentView/TutorList';
 import UserAppointments from '../TutorView/UserAppointments';
-import UserList from '../AdminView/UserList';
+import RemoveAppointment from '../AdminView/RemoveAppointment';
 
 export default function Home() {
     const [user, setUser] = useState(undefined);
@@ -29,7 +29,7 @@ export default function Home() {
             );
         case USER_TYPES.ADMIN:
             return(
-                <UserList />
+                <RemoveAppointment />
             );
         case USER_TYPES.STUDENT: 
             return(

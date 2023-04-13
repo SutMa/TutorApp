@@ -55,7 +55,7 @@ const Login = () => {
 
       // NOTE: setting local storage
       await saveUserStorage({
-        email: emailText,
+        email: caseInsensitiveEmail,
         role: userTypeText,
       });
 

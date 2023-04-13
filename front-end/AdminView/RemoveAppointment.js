@@ -2,9 +2,8 @@ import { useEffect, useState } from 'react';
 import { View, Alert, Text, Button, ScrollView } from 'react-native';
 import { getTimeScheduleById, setTimeSchedule, DAYS, getAllTimeSchedule, HOUR_STATUS } from '../controllers/tutor/tutorController';
 
-export default function UserList() {
+export default function RemoveAppointment() {
     const [schedules, setSchedules] = useState(undefined);
-
 
     const deleteAppointment = (tutor, day, hourIndex, printTime, student) => {
       Alert.alert('Remove Appointment', `Are you sure you want to remove an appointment at ${printTime} with ${tutor} and ${student}?`, [
@@ -26,17 +25,6 @@ export default function UserList() {
               })
               .catch(err => console.error(err));
           });
-        }},
-      ]);
-    }
-
-    const editAppointment = (tutor, day, hourIndex, printTime, student) => {
-      Alert.alert('Edit Appointment', `Are you sure you want to edit an appointment at ${printTime} with ${tutor} and ${student}?`, [
-        {
-          text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
-        },
-        {text: 'Confirm', onPress: () => {
         }},
       ]);
     }
@@ -78,7 +66,7 @@ export default function UserList() {
             let printTime = `${hourText} ${hourTextSuffix}-${nextHourText} ${nextHourTextSuffix}`;
 
             appointments.push(
-              <View>
+              <View key={ `${schedule.id}-${status}-${day}-${hourText}` }>
                 <Text>{ `${schedule.id} has an appointment with ${status} from ${hourText} ${hourTextSuffix} to ${nextHourText} ${nextHourTextSuffix}` }</Text>
                 <Button onPress={() => {
                   deleteAppointment(schedule.id, day, hourIndexText, printTime, status);

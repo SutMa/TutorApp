@@ -3,6 +3,7 @@ import { Text } from 'react-native';
 import { getUserStorage, USER_TYPES } from '../controllers/auth/user';
 import TimeSchedule from '../TutorView/TimeSchedule';
 import Appointments from '../StudentView/Appointments';
+import AddAppointment from '../AdminView/AddAppointment';
 
 export default function Calendar() {
     const [user, setUser] = useState(undefined);
@@ -26,17 +27,14 @@ export default function Calendar() {
             return(
                 <TimeSchedule />
             );
-            break;
         case USER_TYPES.ADMIN:
             return(
-                <Text>Admin View</Text>
+              <AddAppointment />
             );
-            break;
         case USER_TYPES.STUDENT: 
             return(
                 <Appointments />
             );
-            break;
         default:
             console.error('unknown role');
     }

@@ -3,7 +3,7 @@ import {  where } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const USER_PASSWORD_MIN_SIZE = 8;
-const USER_PATH = 'user';
+export const USER_PATH = 'user';
 export const USER_TOKEN = 'user';
 
 export const USER_TYPES = {

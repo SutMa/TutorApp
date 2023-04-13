@@ -4,6 +4,7 @@ import { collection, addDoc, getDocs, deleteDoc, getDoc, doc, updateDoc, setDoc,
 export async function getDocById(path, docId){
     const docRef = doc(db, path, docId);
     const result = await getDoc(docRef);
+
     return {
         ...result.data(),
         id: result.id,
@@ -11,6 +12,8 @@ export async function getDocById(path, docId){
 }
 
 export async function docExists(path, docId){
+    console.log(path, docId);
+
     const docRef = doc(db, path, docId);
     const result = await getDoc(docRef);
     return result.exists();

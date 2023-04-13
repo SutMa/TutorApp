@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity, StyleSheet, View  } from 'react-native';
 import { getUserStorage } from '../controllers/auth/user';
+import { USER_TYPES } from '../controllers/auth/user';
+import EditAppointment from '../AdminView/EditAppointment'; 
 
 export default function LoginButton() {
   const navigation = useNavigation();
@@ -17,6 +19,18 @@ export default function LoginButton() {
   const handleLoginNavigation = async () => {
     navigation.navigate('Login');
   };
+
+  if(user === undefined) {
+    return (
+      <Text>Loading</Text>
+    );
+  }
+
+  if(user.role === USER_TYPES.ADMIN) {
+    return (
+      <EditAppointment />
+    );
+  }
 
   return (
     <View style={styles.container}>

@@ -1,6 +1,6 @@
 import { createDocById, getAllDoc, getDocById } from "../firebaseCrud";
 
-const SCHEDULE_COLLECTION = 'schedule';
+export const SCHEDULE_COLLECTION = 'schedule';
 
 export const DAYS = {
     MONDAY: 'monday',

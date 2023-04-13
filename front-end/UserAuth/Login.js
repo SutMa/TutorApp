@@ -23,13 +23,15 @@ const Login = () => {
       console.error('Login was unsuccessful. All fields are required. FIXME: notify user login was unseccessful');
       return;
     }
+    
+    const emailTextLower = emailText.toLowerCase();
 
     // NOTE: attempt login
-    const result = await signIn(emailText.toLowerCase(), passwordText);
+    const result = await signIn(emailTextLower, passwordText);
     if(result) {
       // NOTE: setting local storage
       await saveUserStorage({
-        email: emailText,
+        email: emailTextLower,
         role: result,
       });
       navigation.replace('Root');

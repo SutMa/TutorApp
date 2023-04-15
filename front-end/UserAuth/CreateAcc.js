@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Pressable, View, TextInput, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { signUp, USER_TYPES, validateEmail, validatePassword, clearUserStorage, saveUserStorage } from '../controllers/auth/user';
-import { initTimeSchedule } from '../controllers/tutor/tutorController';
+import { initTutor } from '../controllers/tutor/tutorController';
 import RadioButtonGroup, { RadioButtonItem } from "expo-radio-button";
 import { AUTH_ROUTES } from '../Routes';
 
@@ -50,7 +50,7 @@ const Login = () => {
 
       // NOTE: initializing schedule
       if(userTypeText == USER_TYPES.TUTOR) {
-        await initTimeSchedule(caseInsensitiveEmail);
+        await initTutor(caseInsensitiveEmail);
       }
 
       // NOTE: setting local storage

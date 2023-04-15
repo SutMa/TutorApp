@@ -2,10 +2,8 @@ import { useEffect, useState } from 'react';
 import { Alert, Button, Text, StyleSheet, Pressable, View, Image, ScrollView, LayoutAnimation } from 'react-native';
 import { getAllTutors, getUserStorage } from '../controllers/auth/user';
 import { DAYS, getTimeScheduleById, HOUR_STATUS, setTimeSchedule } from '../controllers/tutor/tutorController'; 
-import { useNavigation } from '@react-navigation/native';
 
 export default function TutorList() {
-    const navigation = useNavigation();
     const [tutors, setTutors] = useState(undefined);
     const [openDropdown, setOpenDropdown] = useState(null);
     const [user, setUser] = useState(undefined);
@@ -21,6 +19,7 @@ export default function TutorList() {
                 innerTutors.push({
                   id: tutor.id,
                   days: days,
+                  subject: tutor.subject,
                 });
 
                 setTutors(innerTutors);
@@ -120,7 +119,7 @@ export default function TutorList() {
                     setOpenDropdown(isOpen ? null : i)
                 }}>
                     <Text style={styles.names}>{ tutors[i].id }</Text>
-                    <Text style={styles.subjects}>subject</Text>
+                    <Text style={styles.subjects}>{ tutors[i].subject }</Text>
                     <View style={[styles.rating, isOpen && styles.ratingsOpen]}>
                         <Text style={styles.ratingNum}>4.5</Text>
                     </View>

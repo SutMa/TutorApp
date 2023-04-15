@@ -1,6 +1,34 @@
-import { createDocById, getAllDoc, getDocById } from "../firebaseCrud";
+import {USER_PATH} from "../auth/user";
+import { updateDocById, createDocById, getAllDoc, getDocById } from "../firebaseCrud";
 
 export const SCHEDULE_COLLECTION = 'schedule';
+
+export const SUBJECT = {
+  GENERAL: 'general',
+  MATH: 'math',
+  ENGLISH: 'english',
+  HISTORY: 'history',
+  SCIENCE: 'science',
+}
+
+export const SubjectToIndex = (subject) => {
+  let i = -1;
+  let currentIndex = 0;
+
+  Object.keys(SUBJECT).forEach(key => {
+    const sub = SUBJECT[key];
+
+    if(sub === subject) {
+      i = currentIndex;
+    }
+
+    currentIndex++;
+  });
+
+  return i;
+}
+
+export const DEFAULT_SUBJECT = SUBJECT.GENERAL;
 
 export const DAYS = {
     MONDAY: 'monday',
@@ -15,6 +43,11 @@ export const HOUR_STATUS = {
     AVAILABLE: '2',
 }
 
+export const initTutor = async (email) => {
+  await initTimeSchedule(email);
+  await initSubject(email);
+}
+
 export const initTimeSchedule = async (email) => {
     const NOT_AVAILABLE = HOUR_STATUS.NOT_AVAILABLE;
 
@@ -27,6 +60,22 @@ export const initTimeSchedule = async (email) => {
     };
 
     await setTimeSchedule(email, schedule);
+}
+
+export const initSubject = async (email) => {
+  const userSubject = {
+    subject: DEFAULT_SUBJECT,
+  }
+
+  await updateDocById(USER_PATH, email, userSubject);
+}
+
+export const updateSubject = async (email, subject) => {
+  const userSubject = {
+    subject, 
+  };
+
+  await updateDocById(USER_PATH, email, userSubject);
 }
 
 export const setTimeSchedule = async (email, schedule) => {

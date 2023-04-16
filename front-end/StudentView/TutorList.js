@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Alert, Button, Text, StyleSheet, Pressable, View, Image, ScrollView, LayoutAnimation } from 'react-native';
-import { getAllTutors, getUserStorage } from '../controllers/auth/user';
+import { getAllTutors, getUserStorage, USER_DEFAULT_PROFILE_PIC_URI } from '../controllers/auth/user';
 import { DAYS, getTimeScheduleById, HOUR_STATUS, setTimeSchedule } from '../controllers/tutor/tutorController'; 
 
 export default function TutorList() {
@@ -20,6 +20,7 @@ export default function TutorList() {
                   id: tutor.id,
                   days: days,
                   subject: tutor.subject,
+                  profilePicUrl: tutor.profilePicUrl,
                 });
 
                 setTutors(innerTutors);
@@ -124,7 +125,7 @@ export default function TutorList() {
                         <Text style={styles.ratingNum}>4.5</Text>
                     </View>
                     <Text style={[styles.options, isOpen && styles.optionsOpen]}>⋮</Text>
-                    <Image source={require('../assets/Nahida.jpg')} style={[styles.profiles, isOpen && styles.profilesOpen]}/>
+                    <Image source={{ uri:(tutors[i].profilePicUrl ?? USER_DEFAULT_PROFILE_PIC_URI)}} style={[styles.profiles, isOpen && styles.profilesOpen]}/>
                 </Pressable>
                 {isOpen && (
                     <View style={styles.dropdownContainer}>

@@ -19,7 +19,8 @@
     "firebase": "^9.17.1",
     "react": "18.1.0",
     "react-native": "0.70.5",
-    "react-native-wheel-scrollview-picker": "^2.0.1"
+    "react-native-wheel-scrollview-picker": "^2.0.1",
+    "expo-image-picker": "~14.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

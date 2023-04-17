@@ -127,25 +127,36 @@ export default function LoginButton() {
 
   if(user.role === USER_TYPES.TUTOR) {
     subjectPicker = (
-      <ScrollView>
-          <ScrollPicker
-            dataSource={currentSubjects}
-            selectedIndex={currentSubjectIndex}
-            wrapperHeight={180}
-            wrapperWidth={300}
-            wrapperColor='#FFFFFF'
-            itemHeight={60}
-            highlightColor='#d8d8d8'
-            highlightBorderWidth={2}
-            onValueChange={(data, selectedIndex) => {
-              const newCurrentSubjects = [...currentSubjects];
-              newCurrentSubjects[selectedIndex] = data;
-
-              setCurrentSubjects(newCurrentSubjects);
-              setCurrentSubjectIndex(selectedIndex);
-            }}
-          />
-        </ScrollView>
+      <ScrollView style={styles.scrollview}>
+        <ScrollPicker
+          dataSource={currentSubjects}
+          selectedIndex={currentSubjectIndex}
+          wrapperHeight={180}
+          wrapperWidth={300}
+          wrapperBackground={'#FFFFFF'}
+          itemHeight={60}
+          highlightColor={'#8DB6CD'}
+          highlightBorderWidth={2}
+          highlightBorderColor={'#1A1423'}
+          renderItem={(data, index, isSelected) => {
+            return (
+              <View style={[styles.item, isSelected && styles.selectedItem]}>
+                <Text style={[styles.itemText, isSelected && styles.selectedItemText]}>
+                  {data}
+                </Text>
+              </View>
+            );
+          }}
+          onValueChange={(data, selectedIndex) => {
+            const newCurrentSubjects = [...currentSubjects];
+            newCurrentSubjects[selectedIndex] = data;
+    
+            setCurrentSubjects(newCurrentSubjects);
+            setCurrentSubjectIndex(selectedIndex);
+          }}
+        />
+        <View style={styles.scrollviewContentContainer} /> 
+      </ScrollView>
     );
 
     subjectButton = (
@@ -159,12 +170,12 @@ export default function LoginButton() {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingBottom: 80 }]}>
       <Text style={styles.welcome}>Welcome, { user.email }!</Text>
-      <View>
+      <View style={styles.imageContainer}>
         <Button title='Pick a profile picture' onPress={pickImage} />
         <Image source={{ uri:image }} style={{ width: 200, height: 200 }} />
-        <Button title='Update profile picture' onPress={updateImage} /> 
+        <Button title='Update profile picture' onPress={updateImage} />
       </View>
       <Text style={styles.role}>Role: {user.role}</Text>
       {
@@ -172,7 +183,7 @@ export default function LoginButton() {
       }
       {
         subjectButton ?? <View></View>
-      } 
+      }
       <TouchableOpacity
         style={styles.button}
         onPress={handleLoginNavigation}
@@ -204,7 +215,7 @@ const styles = StyleSheet.create({
   welcome: {
     fontSize: 24,
     fontWeight: 'bold', // make the text bold
-    color: 'red', // set the text color to red
+    color: '#736B92', // welcome color English violet
     marginBottom: 20, // add margin to the bottom
   },
   image: {
@@ -219,4 +230,32 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginVertical: 10,
   },
+
+  scrollview: {
+    flexGrow: 0, // 
+  },
+  scrollviewContentContainer: {
+    height: 60, // the same as itemHeight 
+  },
+
+  item: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 60,
+    width: 100,
+    paddingHorizontal: 10,
+  },
+  itemText: {
+    color: '#000000',
+    fontSize: 18,
+  },
+  selectedItem: {
+    backgroundColor: '#8DB6CD', // set the background color for subject
+  },
+  selectedItemText: {
+    color: '#FFFFFF', // the color of highlight subject
+    fontWeight: 'bold', // bold the highlight subject
+  },
+  
+  
 });

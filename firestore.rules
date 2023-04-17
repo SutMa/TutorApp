@@ -8,5 +8,9 @@ service cloud.firestore {
     match /schedule/{doc_id} {
       allow read, write: if true;
     }
+
+    match /review/{doc_id} {
+      allow read, write: if true;
+    }
   }
 }

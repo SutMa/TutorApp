@@ -5,6 +5,8 @@ import { signUp, USER_TYPES, validateEmail, validatePassword, clearUserStorage, 
 import { initTutor } from '../controllers/tutor/tutorController';
 import RadioButtonGroup, { RadioButtonItem } from "expo-radio-button";
 import { AUTH_ROUTES } from '../Routes';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import { showToast } from '../util';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -26,20 +28,18 @@ const Login = () => {
   }, []);
 
   const attemptSignUp = async () => {
-    console.log(`Attempting signup as "${userTypeText}" with { "email": "${emailText}", "password": "${passwordText}" }`);
-
-    if(!emailText || !passwordText || !userTypeText) {
-      console.error('SignUp was unsuccessful. All fields are required. FIXME: notify user signup was unseccessful');
+    if(!Boolean(emailText) || !Boolean(passwordText) || !Boolean(userTypeText)) {
+      showToast('error', 'Invalid Input', 'Username, password, and user type are required!');
       return;
     }
 
     if(!validateEmail(emailText)) {
-      console.error("Signup was unsuccessful. invalid email: FIXME: notify user email was invalid");
+      showToast('error', 'Invalid Input', 'Email must be a valid @lsu.edu email!');
       return;
     }
 
     if(!validatePassword(passwordText)) {
-      console.error("Signup was unsuccessful. invalid password: FIXME: notify user email was invalid");
+      showToast('error', 'Invalid Input', 'Password must be at least 8 characters long!');
       return;
     }
 
@@ -61,7 +61,7 @@ const Login = () => {
 
       navigation.replace(AUTH_ROUTES.ROOT_USERS);
     }catch(err) {
-      console.error(err);
+      showToast('error', 'Invalid Email', 'Account with email already exists!');
     }
   };
 
@@ -131,6 +131,7 @@ const Login = () => {
       <Pressable style={styles.pressable} onPress={attemptSignUp}>
           <Text style={styles.Buttontext}>Submit</Text>
       </Pressable>
+      <Toast topOffset={100} />
     </View>
   );
 };

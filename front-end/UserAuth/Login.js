@@ -3,6 +3,8 @@ import { StyleSheet, Pressable, View, TextInput, Text, TouchableOpacity } from '
 import { useNavigation } from '@react-navigation/native';
 import { signIn, clearUserStorage, saveUserStorage, USER_TYPES } from '../controllers/auth/user';
 import { AUTH_ROUTES } from '../Routes';
+import Toast from 'react-native-toast-message';
+import { showToast } from '../util';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -17,10 +19,8 @@ const Login = () => {
   }, []);
 
   const attemptLogin = async () => {
-    console.log(`Attempting login as with { "email": "${emailText}", "password": "${passwordText}" }`);
-
-    if(!emailText || !passwordText) {
-      console.error('Login was unsuccessful. All fields are required. FIXME: notify user login was unseccessful');
+    if(!Boolean(emailText) || !Boolean(passwordText)) {
+      showToast('error', 'Invalid Input', 'Email and password are required!');
       return;
     }
     
@@ -41,7 +41,7 @@ const Login = () => {
         navigation.replace(AUTH_ROUTES.ROOT_USERS);
       }
     } else {
-      console.error('Login was unsuccessful. FIXME: notify user login was unseccessful');
+      showToast('error', 'Incorrect Input', 'Username or password was incorrect!');
     }
   };
   
@@ -81,6 +81,7 @@ const Login = () => {
       <Pressable style={styles.pressable} onPress={() => attemptLogin().then(() => {})}>
           <Text style={styles.Buttontext}>Submit</Text>
       </Pressable>
+      <Toast topOffset={100} />
     </View>
   );
 };

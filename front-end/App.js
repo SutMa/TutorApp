@@ -14,6 +14,7 @@ import Calendar from './View/Calendar';
 import AddAppointment from './AdminView/AddAppointment';
 import RemoveAppointment from './AdminView/RemoveAppointment';
 import EditAppointment from './AdminView/EditAppointment';
+import Review from './View/Review';
 
 const Stack = createStackNavigator();
 
@@ -79,6 +80,9 @@ function RootUsers() {
               case HOME_ROUTES.PROFILE:
                 iconName = 'md-settings';
                 break;
+              case HOME_ROUTES.REVIEW:
+                iconName = 'md-book-outline';
+                break;
               default:
                 console.error('invalid home route');
             }
@@ -89,8 +93,9 @@ function RootUsers() {
           tabBarInactiveTintColor: 'gray',
         })}>
       <Tab.Screen name={HOME_ROUTES.HOME} component={Home} options={{ unmountOnBlur: true}} />
-      <Tab.Screen name={HOME_ROUTES.CALENDAR} component={Calendar} options={{ unmountOnBlur: true}} />
-      <Tab.Screen name={HOME_ROUTES.PROFILE} component={Profile} options={{ unmountOnBlur: true }} />      
+      <Tab.Screen name={HOME_ROUTES.CALENDAR} component={Calendar} options={{ unmountOnBlur: true }} />
+      <Tab.Screen name={HOME_ROUTES.REVIEW} component={Review} options={{ unmountOnBlue: true }} />
+      <Tab.Screen name={HOME_ROUTES.PROFILE} component={Profile} options={{ unmountOnBlur: true }} />
     </Tab.Navigator>
   )
 }

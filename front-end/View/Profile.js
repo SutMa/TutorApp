@@ -16,7 +16,6 @@ import { USER_PATH} from '../controllers/auth/user';
 import { getDocById, updateDocById } from '../controllers/firebaseCrud';
 import * as ImagePicker from 'expo-image-picker';
 import ScrollPicker from 'react-native-wheel-scrollview-picker';
-import { deleteObject } from 'firebase/storage';
 
 export default function LoginButton() {
   const navigation = useNavigation();

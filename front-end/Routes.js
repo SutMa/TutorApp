@@ -18,4 +18,5 @@ export const HOME_ROUTES = {
     HOME: 'Home',
     PROFILE: 'Profile',
     CALENDAR: 'Calendar',
+    REVIEW: 'Review',
 }

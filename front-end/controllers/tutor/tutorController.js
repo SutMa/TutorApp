@@ -45,7 +45,7 @@ export const HOUR_STATUS = {
 
 export const initTutor = async (email) => {
   await initTimeSchedule(email);
-  await initSubject(email);
+  await updateTutorFields(email);
 }
 
 export const initTimeSchedule = async (email) => {
@@ -62,9 +62,11 @@ export const initTimeSchedule = async (email) => {
     await setTimeSchedule(email, schedule);
 }
 
-export const initSubject = async (email) => {
+export const updateTutorFields = async (email) => {
   const userSubject = {
     subject: DEFAULT_SUBJECT,
+    avg: 0,
+    avgWeight: 0,
   }
 
   await updateDocById(USER_PATH, email, userSubject);

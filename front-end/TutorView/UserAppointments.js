@@ -68,17 +68,5 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     flex: 1,
     padding: 10,
-  },
-  ScrollView: {
-    
-  },
-
- innerBox: {
-    
-
-
   }
-
-  
-  
 });

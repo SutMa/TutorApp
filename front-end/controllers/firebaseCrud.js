@@ -32,7 +32,23 @@ export async function getAllDoc(path){
     return docs;
 }
 
-export async function queryAllDoc(path, queryParam){
+export async function queryTwiceAllDoc(path, queryParam0, queryParam1) {
+    const docs = [];
+    const collectionRef = collection(db, path);
+    const q = query(collectionRef, queryParam0, queryParam1);
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach((doc) => {
+        docs.push({
+            id: doc.id,
+            ...doc.data(),
+        });
+    })
+
+    return docs;
+}
+
+export async function queryAllDoc(path, queryParam) {
     const docs = [];
     const collectionRef = collection(db, path);
     const q = query(collectionRef, queryParam);

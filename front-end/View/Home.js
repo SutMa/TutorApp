@@ -7,7 +7,6 @@ import RemoveAppointment from '../AdminView/RemoveAppointment';
 
 export default function Home() {
     const [user, setUser] = useState(undefined);
-    console.log(user);
 
     useEffect(() => {
         getUserStorage().then((result) => {

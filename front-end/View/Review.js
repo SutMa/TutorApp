@@ -26,7 +26,7 @@ export default function Review() {
         );
     } else if (user.role === USER_TYPES.TUTOR) {
         return(
-            <StudentReview />
+            <StudentReview user={user} />
         )
     } else {
         return(

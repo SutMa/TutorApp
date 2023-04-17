@@ -1,8 +1,8 @@
 import { View, ScrollView, Text } from "react-native"
 import { useEffect, useState } from "react"
-import {getUserStorage, USER_PATH} from "../controllers/auth/user";
-import {getAllDoc, getDocById} from "../controllers/firebaseCrud";
-import {REVIEW_COLLECTION} from "../controllers/review/reviewController";
+import { getUserStorage, USER_PATH } from "../controllers/auth/user";
+import { getAllReviewsById } from "../controllers/review/reviewController";
+import {getDocById} from "../controllers/firebaseCrud";
 
 export default function StudentReview(props) {
   const [avg, setAvg] = useState(undefined);
@@ -11,19 +11,17 @@ export default function StudentReview(props) {
   const user = props.user;
 
    useEffect(() => {
-      getUserStorage().then((userJSON) => {
-        const innerUser = JSON.parse(userJSON);
-        setUser(innerUser);
-
-        getAllDoc(REVIEW_COLLECTION).then((innerReviews) => {
-          console.log(innerReviews);
+      getAllReviewsById(user.email).then((innerReviews) => {
+        getDocById(USER_PATH, user.email).then((innerUser) => {
           setReviews(innerReviews);
+          setAvg(innerUser.avg);
+          setAvgWeight(innerUser.avgWeight);
         });
       });
-   });
+   }, []);
 
 
-  if(user === undefined || avg === undefined || avgWeight === undefined) {
+  if(avg === undefined || avgWeight === undefined || reviews === undefined) {
     return (
       <Text>Loading</Text>
     );
@@ -33,16 +31,20 @@ export default function StudentReview(props) {
 
   reviews.forEach((review) => {
     reviewsJsx.push(
-      <Text>{review.reviewText}</Text>
+      <View key={review.id}>
+        <Text>Email: { review.studentEmail }</Text>
+        <Text>Rating: { review.avg }</Text>
+        <Text>{review.reviewText}</Text>
+      </View>
     );
   });
 
     return(
       <View>
-        <Text>Avg: { avg }</Text>
-        <Text>AvgWeight: { avgWeight }</Text>
+        <Text>Your Average Rating: { avg }</Text>
+        <Text>Number of Reviews: { avgWeight }</Text>
         <ScrollView>
-
+          { reviewsJsx }
         </ScrollView>
       </View>
     )

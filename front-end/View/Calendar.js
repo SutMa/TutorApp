@@ -7,14 +7,13 @@ import AddAppointment from '../AdminView/AddAppointment';
 
 export default function Calendar() {
     const [user, setUser] = useState(undefined);
-    console.log(user);
 
     useEffect(() => {
         getUserStorage().then((result) => {
-            console.log(JSON.stringify(result));
             setUser(JSON.parse(result));
         }
-)}, []);
+    )}, []);
+
     // NOTE don't load unless user is loaded
     if(!user) {
         return(

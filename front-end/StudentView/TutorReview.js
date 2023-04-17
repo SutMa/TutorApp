@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ScrollView, StyleSheet, View, Text, TextInput, Button } from "react-native";
 import ScrollPicker from 'react-native-wheel-scrollview-picker';
-import { createReview } from "../controllers/review/reviewController";
+import { createReview, reviewExists } from "../controllers/review/reviewController";
 import { showToast } from '../util';
 import Toast from 'react-native-toast-message';
 
@@ -23,6 +23,11 @@ export default function TutorReview(props) {
             showToast('error', 'Invalid Input', 'Review message is required!');
             return;
         }
+
+        if(await reviewExists(tutorEmail, user.email)) {
+          showToast('error', 'Invalid Input', `You have already reviewed ${tutorEmail}`);
+          return;
+        };
 
         try{
             await createReview(user.email, tutorEmail, reviewText, reviewIndex + 1);

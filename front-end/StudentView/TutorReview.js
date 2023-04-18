@@ -33,7 +33,7 @@ export default function TutorReview(props) {
             await createReview(user.email, tutorEmail, reviewText, reviewIndex + 1);
             showToast('success', 'Status', 'Review sent successfully!');
         } catch(err) {
-            console.error(err);
+            showToast('error', 'Unknown Error', 'An unknown error occurred!');
         }
     }
 
@@ -44,6 +44,7 @@ export default function TutorReview(props) {
     }
 
     return(
+      <>
         <View style={styles.container}>
             <Text>Write a review</Text>
             <TextInput onChangeText={text => setTutorEmail(text)} placeholder='Tutor Email'></TextInput>
@@ -75,9 +76,10 @@ export default function TutorReview(props) {
                 padding={10}
             />
 
-        <Button title='Submit Review' onPress={submitReview} />
-        <Toast />
-      </View>
+          <Button title='Submit Review' onPress={submitReview} />
+        </View>
+      <Toast />
+      </>
     );
 }
 

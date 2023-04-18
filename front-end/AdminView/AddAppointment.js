@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { StyleSheet, View, Text, ScrollView, Button, TextInput } from "react-native";
+import { View, Text, ScrollView, Button, TextInput } from "react-native";
 import ScrollPicker from "react-native-wheel-scrollview-picker";
 import { docExists, getDocById } from "../controllers/firebaseCrud";
 import { USER_PATH, USER_TYPES } from "../controllers/auth/user";
 import { getTimeScheduleById, DAYS, HOUR_STATUS, setTimeSchedule} from "../controllers/tutor/tutorController";
+import Toast from "react-native-toast-message";
+import { showToast } from "../util"; 
 
 export default function AddAppointment() {
   const hours = ['9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM'];
@@ -19,7 +21,7 @@ export default function AddAppointment() {
 
   const createAppointment = async () => {
     if(tutorEmail === undefined || studentEmail === undefined) {
-      console.error('all fields are required!');
+      showToast('error', 'Invalid Input', 'Tutor and student email are required!');
       return;
     }
     
@@ -28,12 +30,10 @@ export default function AddAppointment() {
       const studentUser = await getDocById(USER_PATH, studentEmail);
       
       if(tutorUser.role !== USER_TYPES.TUTOR) {
-        console.error('tutor email did not belong to a tutor!');
+        showToast('error', 'Incorrect Input', 'Tutor email did not belong to a tutor!');
       } else if(studentUser.role !== USER_TYPES.STUDENT) {
-        console.error('student email did not belong to a student');
+        showToast('error', 'Incorrect Input', 'Student email did not belong to a student!');
       } else {
-        console.log('valid emails');
-
         const schedule = await getTimeScheduleById(tutorEmail);
 
         const status = schedule[currentDay][currentTimeIndex];
@@ -41,82 +41,86 @@ export default function AddAppointment() {
         if(status === HOUR_STATUS.AVAILABLE) {
           schedule[currentDay][currentTimeIndex] = studentEmail;
           await setTimeSchedule(tutorEmail, schedule);
-          console.info('appoint was created successfully');
+
+          showToast('success', 'Appointment Created', 'The apointment was created successfully!');
         } else {
-          console.error('tutor is not available at this time!');
+          showToast('error', 'Tutor Unavailable', 'The tutor is unavailable at this time!');
         }
       }
     } else {
-      console.error('tutor or student email did not exists!');
+      showToast('error', 'Incorrect Input', 'The tutor or student email did not exist!');
     }
   }
 
   return (
-    <View>
-      <Text>Add an Appointment</Text>
-      <Text>Tutor Email</Text>
-      <TextInput
-        placeholder='Tutor Email Address'
-        keyboardType='email-address'
-        backgroundColor='#fbfbfb'
-        width={280}
-        maxLength={40}
-        onChangeText={text => setTutorEmail(text)}>
-      </TextInput>
-      <Text>Student Email</Text>
-      <TextInput
-        placeholder='Student Email Address'
-        keyboardType='email-address'
-        backgroundColor='#fbfbfb'
-        width={280}
-        maxLength={40}
-        onChangeText={text => setStudentEmail(text)}>
-      </TextInput>
-      <Text>Select the day and time</Text>
-      <View style={[{
-        flexDirection: 'row',
-      }]}>
-        <ScrollView>
-          <ScrollPicker
-            dataSource={stateDays}
-            selectedIndex={currentDayIndex}
-            wrapperHeight={180}
-            wrapperWidth={150}
-            wrapperColor='#FFFFFF'
-            itemHeight={60}
-            highlightColor='#d8d8d8'
-            highlightBorderWidth={2}
-            onValueChange={(data, selectedIndex) => {
-              const newStateDays = [...stateDays];
-              newStateDays[selectedIndex] = data;
+    <>
+      <View>
+        <Text>Add an Appointment</Text>
+        <Text>Tutor Email</Text>
+        <TextInput
+          placeholder='Tutor Email Address'
+          keyboardType='email-address'
+          backgroundColor='#fbfbfb'
+          width={280}
+          maxLength={40}
+          onChangeText={text => setTutorEmail(text)}>
+        </TextInput>
+        <Text>Student Email</Text>
+        <TextInput
+          placeholder='Student Email Address'
+          keyboardType='email-address'
+          backgroundColor='#fbfbfb'
+          width={280}
+          maxLength={40}
+          onChangeText={text => setStudentEmail(text)}>
+        </TextInput>
+        <Text>Select the day and time</Text>
+        <View style={[{
+          flexDirection: 'row',
+        }]}>
+          <ScrollView>
+            <ScrollPicker
+              dataSource={stateDays}
+              selectedIndex={currentDayIndex}
+              wrapperHeight={180}
+              wrapperWidth={150}
+              wrapperColor='#FFFFFF'
+              itemHeight={60}
+              highlightColor='#d8d8d8'
+              highlightBorderWidth={2}
+              onValueChange={(data, selectedIndex) => {
+                const newStateDays = [...stateDays];
+                newStateDays[selectedIndex] = data;
 
-              setStateDays(newStateDays);
-              setCurrentDayIndex(selectedIndex);
-              setCurrentDay(data);
-            }}
-          />
-        </ScrollView>
-        <ScrollView>
-          <ScrollPicker
-            dataSource={stateHours}
-            selectedIndex={currentTimeIndex}
-            wrapperHeight={180}
-            wrapperWidth={150}
-            wrapperColor='#FFFFFF'
-            itemHeight={60}
-            highlightColor='#d8d8d8'
-            highlightBorderWidth={2}
-            onValueChange={(data, selectedIndex) => {
-              const newStateHours = [...stateHours];
-              newStateHours[selectedIndex] = data;
+                setStateDays(newStateDays);
+                setCurrentDayIndex(selectedIndex);
+                setCurrentDay(data);
+              }}
+            />
+          </ScrollView>
+          <ScrollView>
+            <ScrollPicker
+              dataSource={stateHours}
+              selectedIndex={currentTimeIndex}
+              wrapperHeight={180}
+              wrapperWidth={150}
+              wrapperColor='#FFFFFF'
+              itemHeight={60}
+              highlightColor='#d8d8d8'
+              highlightBorderWidth={2}
+              onValueChange={(data, selectedIndex) => {
+                const newStateHours = [...stateHours];
+                newStateHours[selectedIndex] = data;
 
-              setStateHours(newStateHours);
-              setCurrentTimeIndex(selectedIndex);
-            }}
-          />
-        </ScrollView>
+                setStateHours(newStateHours);
+                setCurrentTimeIndex(selectedIndex);
+              }}
+            />
+          </ScrollView>
+        </View>
+        <Button onPress={createAppointment} title='Submit Appointment' />
       </View>
-      <Button onPress={createAppointment} title='Submit Appointment' />
-    </View>
+    <Toast />
+    </>
   );
 }

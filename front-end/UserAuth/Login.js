@@ -46,43 +46,45 @@ const Login = () => {
   };
   
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Sign in</Text>
-      <View style={{flexDirection: 'row', alignSelf: 'flex-start', paddingLeft: 75}}>
-        <Text style={styles.createAccount}>
-          New user?{' '}
-        </Text>
-        <TouchableOpacity onPress={() => navigation.navigate(AUTH_ROUTES.CREATE_ACCOUNT)}>
-            <Text style={styles.link}>Create an account</Text>
-          </TouchableOpacity>
+    <>
+      <View style={styles.container}>
+        <Text style={styles.title}>Sign in</Text>
+        <View style={{flexDirection: 'row', alignSelf: 'flex-start', paddingLeft: 75}}>
+          <Text style={styles.createAccount}>
+            New user?{' '}
+          </Text>
+          <TouchableOpacity onPress={() => navigation.navigate(AUTH_ROUTES.CREATE_ACCOUNT)}>
+              <Text style={styles.link}>Create an account</Text>
+            </TouchableOpacity>
+        </View>
+        <TextInput
+          style={styles.textInput}
+          placeholder='Email'
+          autoComplete='email'
+          autoCorrect={false}
+          keyboardType='email-address'
+          backgroundColor='#fbfbfb'
+          width={280}
+          maxLength={40}
+          onChangeText={text => setEmailText(text)}>
+        </TextInput>
+        <TextInput 
+          style={styles.textInput}
+          placeholder='Password'
+          secureTextEntry={true}
+          autoCorrect={false}
+          keyboardType='default'
+          backgroundColor='#fbfbfb'
+          width={280}
+          maxLength={40}
+          onChangeText={text => setPasswordText(text)}>
+        </TextInput>
+        <Pressable style={styles.pressable} onPress={() => attemptLogin().then(() => {})}>
+            <Text style={styles.Buttontext}>Submit</Text>
+        </Pressable>
       </View>
-      <TextInput
-        style={styles.textInput}
-        placeholder='Email'
-        autoComplete='email'
-        autoCorrect={false}
-        keyboardType='email-address'
-        backgroundColor='#fbfbfb'
-        width={280}
-        maxLength={40}
-        onChangeText={text => setEmailText(text)}>
-      </TextInput>
-      <TextInput 
-        style={styles.textInput}
-        placeholder='Password'
-        secureTextEntry={true}
-        autoCorrect={false}
-        keyboardType='default'
-        backgroundColor='#fbfbfb'
-        width={280}
-        maxLength={40}
-        onChangeText={text => setPasswordText(text)}>
-      </TextInput>
-      <Pressable style={styles.pressable} onPress={() => attemptLogin().then(() => {})}>
-          <Text style={styles.Buttontext}>Submit</Text>
-      </Pressable>
-      <Toast topOffset={100} />
-    </View>
+    <Toast topOffset={100} />
+    </>
   );
 };
 

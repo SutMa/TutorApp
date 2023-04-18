@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { Alert, Button, Text, StyleSheet, Pressable, View, Image, ScrollView, LayoutAnimation } from 'react-native';
 import { getAllTutors, getUserStorage, USER_DEFAULT_PROFILE_PIC_URI } from '../controllers/auth/user';
 import { DAYS, getTimeScheduleById, HOUR_STATUS, setTimeSchedule } from '../controllers/tutor/tutorController'; 
+import Toast from 'react-native-toast-message';
+import { showToast } from '../util';
 
 export default function TutorList() {
     const [tutors, setTutors] = useState(undefined);
@@ -21,6 +23,7 @@ export default function TutorList() {
                   days: days,
                   subject: tutor.subject,
                   profilePicUrl: tutor.profilePicUrl,
+                  avg: tutor.avg,
                 });
 
                 setTutors(innerTutors);
@@ -58,11 +61,13 @@ export default function TutorList() {
 
             setTimeSchedule(tutor, days)
               .then(() => {
-                console.log(`Appointment created successfully`);
+                showToast('success', 'Appointment Created', 'Your appointment was successfully created!');
 
                 refreshSchedules();
               })
-              .catch(err => console.error(err));
+              .catch(_err => {
+                showToast('error', 'Appoinment Creation Failed', 'Failed to create apointment at this time!');
+              });
           });
         }},
       ]);
@@ -122,7 +127,7 @@ export default function TutorList() {
                     <Text style={styles.names}>{ tutors[i].id }</Text>
                     <Text style={styles.subjects}>{ tutors[i].subject }</Text>
                     <View style={[styles.rating, isOpen && styles.ratingsOpen]}>
-                        <Text style={styles.ratingNum}>4.5</Text>
+                        <Text style={styles.ratingNum}>{ tutors[i].avg }</Text>
                     </View>
                     <Text style={[styles.options, isOpen && styles.optionsOpen]}>⋮</Text>
                     <Image source={{ uri:(tutors[i].profilePicUrl ?? USER_DEFAULT_PROFILE_PIC_URI)}} style={[styles.profiles, isOpen && styles.profilesOpen]}/>

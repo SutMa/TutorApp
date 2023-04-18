@@ -44,7 +44,6 @@ export const reviewExists = async (tutorEmail, studentEmail) => {
 }
 
 export const getAllReviewsById = async (email) => {
-  console.log(email);
   const result = await queryAllDoc(REVIEW_COLLECTION, where('tutorEmail', '==', email));
   return result;
 }

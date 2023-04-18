@@ -3,6 +3,8 @@ import { ScrollView, TouchableOpacity, LayoutAnimation} from 'react-native';
 import { useEffect, useState } from 'react';
 import { getUserStorage } from '../controllers/auth/user';
 import { DAYS, setTimeSchedule, getTimeScheduleById, HOUR_STATUS } from '../controllers/tutor/tutorController'; 
+import Toast from 'react-native-toast-message';
+import { showToast } from '../util';
 
 export default function TimeSchedule() {
   //NOTE: array of colors representating status of the hour
@@ -23,11 +25,10 @@ export default function TimeSchedule() {
 
     if(scheduleColors[index] === ButtonStateColor[HOUR_STATUS.NOT_AVAILABLE]) {
       newscheduleColors[index] = ButtonStateColor[HOUR_STATUS.AVAILABLE];
-      console.log(newscheduleColors[index]);
     } else if(scheduleColors[index] == ButtonStateColor[HOUR_STATUS.AVAILABLE]) {
       newscheduleColors[index] = ButtonStateColor[HOUR_STATUS.NOT_AVAILABLE];
     } else {
-      console.error('there is an appointment at this time');
+      showToast('error', 'Invalid Input', 'There is an appointment at this time!');
     }
 
     setScheduleColors(newscheduleColors);
@@ -41,7 +42,6 @@ export default function TimeSchedule() {
       return HOUR_STATUS.AVAILABLE;
     }
 
-    //FIXME: should return user id or som?
     return HOUR_STATUS.OTHER;
   }
 
@@ -100,8 +100,12 @@ export default function TimeSchedule() {
     });
 
     setTimeSchedule(email, newSchedule)
-      .then(res => console.log('schedule submitted successfully'))
-      .catch(err => console.error(err));
+      .then(_res => {
+        showToast('success', 'Created Appointment', 'Successfully updated schedule!');
+      })
+      .catch(_err => {
+        showToast('error', 'Unknown Error', 'Failed to update schedule!')
+      });
   }
 
   useEffect(() => {
@@ -208,23 +212,26 @@ export default function TimeSchedule() {
   });
 
   return (
-    <ScrollView>
-    <View style={styles.container}>
-      <Text style={styles.title}>Edit your weekly schedule!</Text>
-      <View style={styles.dayBox}>
-        {timeButtons}
-      </View>
-    </View>
-    <View>
-    <Pressable onPress={updateSchedule}>
-      <View style={styles.buttonContainer}>
-          <Pressable style={styles.button} onPress={updateSchedule}>
-            <Text style={styles.buttonText}>Submit</Text>
-          </Pressable>
+    <>
+      <ScrollView>
+      <View style={styles.container}>
+        <Text style={styles.title}>Edit your weekly schedule!</Text>
+        <View style={styles.dayBox}>
+          {timeButtons}
         </View>
-    </Pressable>
-    </View>
-    </ScrollView>
+      </View>
+      <View>
+      <Pressable onPress={updateSchedule}>
+        <View style={styles.buttonContainer}>
+            <Pressable style={styles.button} onPress={updateSchedule}>
+              <Text style={styles.buttonText}>Submit</Text>
+            </Pressable>
+          </View>
+      </Pressable>
+      </View>
+      </ScrollView>
+      <Toast />
+    </>
   );
 }
 

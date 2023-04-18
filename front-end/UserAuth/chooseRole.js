@@ -7,7 +7,6 @@ const ChooseRole = () => {
   const navigation = useNavigation();
   
   const navToLogin = (userType) => {
-    console.log(`Navigating to Login with userType: ${userType}`);
     navigation.navigate('Login', { userType: userType });
   };
   

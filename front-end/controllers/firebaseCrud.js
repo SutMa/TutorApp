@@ -12,8 +12,6 @@ export async function getDocById(path, docId){
 }
 
 export async function docExists(path, docId){
-    console.log(path, docId);
-
     const docRef = doc(db, path, docId);
     const result = await getDoc(docRef);
     return result.exists();

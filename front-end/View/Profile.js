@@ -16,6 +16,8 @@ import { USER_PATH} from '../controllers/auth/user';
 import { getDocById, updateDocById } from '../controllers/firebaseCrud';
 import * as ImagePicker from 'expo-image-picker';
 import ScrollPicker from 'react-native-wheel-scrollview-picker';
+import Toast from 'react-native-toast-message';
+import { showToast } from '../util';
 
 export default function LoginButton() {
   const navigation = useNavigation();
@@ -35,14 +37,14 @@ export default function LoginButton() {
       quality: 1,
     });
 
-    if (!result.canceled) {
+    if (!result.cancelled) {
       setImage(result.assets[0].uri);
     }
   }
 
   const updateImage = async () => {
     if(image === USER_DEFAULT_PROFILE_PIC_URI || image === userDoc.profilePicUrl) {
-      console.error('please select a new image!');
+      showToast('error', 'Invalid Input', 'Please choose a new profile picture!');
     } else {
       const origUrl = userDoc.profilePicUrl;
       const origImageUri = userDoc.profilePicStorageUri;
@@ -56,10 +58,10 @@ export default function LoginButton() {
         newUserDoc.profilePicStorageUri = newRef.newStorageUri; 
 
         await updateDocById(USER_PATH, user.email, newUserDoc);
-
-        console.log('updated profile picture successfully');
+        
+        showToast('success', 'Profile Picture Updated', 'Your profile picture was successfully updated!');
       } catch (err) {
-        console.error(err)
+        showToast('error', 'Unknown Error', 'An unknown error occurred!');
 
         newUserDoc.profilePicUrl = origUrl;
         newUserDoc.profilePicStorageUri = origImageUri;
@@ -108,7 +110,9 @@ export default function LoginButton() {
     const sub = currentSubjects[currentSubjectIndex];
 
     updateSubject(user.email, sub)
-      .then(() => console.log('successfully updated tutor subject!'))
+      .then(() => {
+        showToast('success', 'Subject Updated', 'Your subject was successfully updated!');
+      })
       .catch(err => console.error(err));
   }
 
@@ -137,7 +141,7 @@ export default function LoginButton() {
           highlightColor={'#8DB6CD'}
           highlightBorderWidth={2}
           highlightBorderColor={'#1A1423'}
-          renderItem={(data, index, isSelected) => {
+          renderItem={(data, _index, isSelected) => {
             return (
               <View style={[styles.item, isSelected && styles.selectedItem]}>
                 <Text style={[styles.itemText, isSelected && styles.selectedItemText]}>
@@ -169,27 +173,30 @@ export default function LoginButton() {
   }
 
   return (
-    <View style={[styles.container, { paddingBottom: 80 }]}>
-      <Text style={styles.welcome}>Welcome, { user.email }!</Text>
-      <View style={styles.imageContainer}>
-        <Button title='Pick a profile picture' onPress={pickImage} />
-        <Image source={{ uri:image }} style={{ width: 200, height: 200 }} />
-        <Button title='Update profile picture' onPress={updateImage} />
+    <>
+      <View style={[styles.container, { paddingBottom: 80 }]}>
+        <Text style={styles.welcome}>Welcome, { user.email }!</Text>
+        <View style={styles.imageContainer}>
+          <Button title='Pick a profile picture' onPress={pickImage} />
+          <Image source={{ uri:image }} style={{ width: 200, height: 200 }} />
+          <Button title='Update profile picture' onPress={updateImage} />
+        </View>
+        <Text style={styles.role}>Role: {user.role}</Text>
+        {
+          subjectPicker ?? <View></View>
+        }
+        {
+          subjectButton ?? <View></View>
+        }
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handleLoginNavigation}
+        >
+          <Text style={styles.buttonText}>Logout</Text>
+        </TouchableOpacity>
       </View>
-      <Text style={styles.role}>Role: {user.role}</Text>
-      {
-        subjectPicker ?? <View></View>
-      }
-      {
-        subjectButton ?? <View></View>
-      }
-      <TouchableOpacity
-        style={styles.button}
-        onPress={handleLoginNavigation}
-      >
-        <Text style={styles.buttonText}>Logout</Text>
-      </TouchableOpacity>
-    </View>
+    <Toast />
+    </>
   );
 }
 

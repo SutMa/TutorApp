@@ -5,7 +5,7 @@ import { signUp, USER_TYPES, validateEmail, validatePassword, clearUserStorage, 
 import { initTutor } from '../controllers/tutor/tutorController';
 import RadioButtonGroup, { RadioButtonItem } from "expo-radio-button";
 import { AUTH_ROUTES } from '../Routes';
-import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import Toast from 'react-native-toast-message';
 import { showToast } from '../util';
 
 const Login = () => {
@@ -74,65 +74,67 @@ const Login = () => {
   };
   
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Create Account</Text>
-      <View style={{flexDirection: 'row', alignSelf: 'flex-start', paddingLeft: 75}}>
-        <Text style={styles.createAccount}>
-          Already a user?{' '}
-        </Text>
-        <TouchableOpacity onPress={() => navigation.navigate(AUTH_ROUTES.LOGIN)}>
-            <Text style={styles.link}>Login into an account</Text>
-          </TouchableOpacity>
+    <>
+      <View style={styles.container}>
+        <Text style={styles.title}>Create Account</Text>
+        <View style={{flexDirection: 'row', alignSelf: 'flex-start', paddingLeft: 75}}>
+          <Text style={styles.createAccount}>
+            Already a user?{' '}
+          </Text>
+          <TouchableOpacity onPress={() => navigation.navigate(AUTH_ROUTES.LOGIN)}>
+              <Text style={styles.link}>Login into an account</Text>
+            </TouchableOpacity>
+        </View>
+        <TextInput
+          style={styles.textInput}
+          placeholder='Email'
+          autoComplete='email'
+          autoCorrect={false}
+          keyboardType='email-address'
+          backgroundColor='#fbfbfb'
+          width={280}
+          maxLength={40}
+          onChangeText={text => setEmailText(text)}>
+        </TextInput>
+        <TextInput 
+          style={styles.textInput}
+          placeholder='Password'
+          secureTextEntry={true}
+          autoCorrect={false}
+          keyboardType='default'
+          backgroundColor='#fbfbfb'
+          width={280}
+          maxLength={40}
+          onChangeText={text => setPasswordText(text)}>
+        </TextInput>
+        <View style={{ borderWidth: 1, margin: 5 }}>
+          <RadioButtonGroup
+            containerStyle={{ margin: 10 }}
+            selected={userTypeText}
+            onSelected={(text) => {
+              setUserTypeText(text);
+              setUserSelectButtonColor(text);
+            }}
+            radioBackground="grey"
+          >
+            <RadioButtonItem style={styles.radioButton} value={USER_TYPES.STUDENT} label={
+              <Text style={{...styles.radioButtonText, color: studentColor, backgroundColor: studentBgColor }}>
+                Student
+              </Text>
+            } />
+            <RadioButtonItem style={styles.radioButton} value={USER_TYPES.TUTOR} label={
+              <Text style={{...styles.radioButtonText, color: tutorColor, backgroundColor: tutorBgColor }}>
+                Tutor
+              </Text>
+            } />
+          </RadioButtonGroup>
+        </View>
+        <Pressable style={styles.pressable} onPress={attemptSignUp}>
+            <Text style={styles.Buttontext}>Submit</Text>
+        </Pressable>
       </View>
-      <TextInput
-        style={styles.textInput}
-        placeholder='Email'
-        autoComplete='email'
-        autoCorrect={false}
-        keyboardType='email-address'
-        backgroundColor='#fbfbfb'
-        width={280}
-        maxLength={40}
-        onChangeText={text => setEmailText(text)}>
-      </TextInput>
-      <TextInput 
-        style={styles.textInput}
-        placeholder='Password'
-        secureTextEntry={true}
-        autoCorrect={false}
-        keyboardType='default'
-        backgroundColor='#fbfbfb'
-        width={280}
-        maxLength={40}
-        onChangeText={text => setPasswordText(text)}>
-      </TextInput>
-      <View style={{ borderWidth: 1, margin: 5 }}>
-        <RadioButtonGroup
-          containerStyle={{ margin: 10 }}
-          selected={userTypeText}
-          onSelected={(text) => {
-            setUserTypeText(text);
-            setUserSelectButtonColor(text);
-          }}
-          radioBackground="grey"
-        >
-          <RadioButtonItem style={styles.radioButton} value={USER_TYPES.STUDENT} label={
-            <Text style={{...styles.radioButtonText, color: studentColor, backgroundColor: studentBgColor }}>
-              Student
-            </Text>
-          } />
-          <RadioButtonItem style={styles.radioButton} value={USER_TYPES.TUTOR} label={
-            <Text style={{...styles.radioButtonText, color: tutorColor, backgroundColor: tutorBgColor }}>
-              Tutor
-            </Text>
-          } />
-        </RadioButtonGroup>
-      </View>
-      <Pressable style={styles.pressable} onPress={attemptSignUp}>
-          <Text style={styles.Buttontext}>Submit</Text>
-      </Pressable>
       <Toast topOffset={100} />
-    </View>
+    </>
   );
 };
 

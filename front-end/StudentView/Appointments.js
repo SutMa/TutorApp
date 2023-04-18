@@ -47,7 +47,6 @@ export default function Appointments() {
                     let nextHourText = (nextHour % 12 == 0) ? '12' : `${nextHour % 12}`;
                     let nextHourTextSuffix = (nextHour >= 12) ? 'PM' : 'AM';
 
-                    console.log(hourText);
                     myAppointmentsElement.push(
                         <Text key={`${day}-${currentHour}`}>{ day }TutorName: { id } | Time { hourText }:{ hourTextSuffix }-{ nextHourText }:{ nextHourTextSuffix }</Text>
                     );

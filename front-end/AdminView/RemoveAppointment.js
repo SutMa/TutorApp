@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { View, Alert, Text, Button, ScrollView } from 'react-native';
 import { getTimeScheduleById, setTimeSchedule, DAYS, getAllTimeSchedule, HOUR_STATUS } from '../controllers/tutor/tutorController';
+import Toast from 'react-native-toast-message';
+import { showToast } from '../util';
 
 export default function RemoveAppointment() {
     const [schedules, setSchedules] = useState(undefined);
@@ -19,7 +21,7 @@ export default function RemoveAppointment() {
 
             setTimeSchedule(tutor, days)
               .then(() => {
-                console.log(`Appointment removed successfully`);
+                showToast('success', 'Appointment Removed', 'The appointment was removed successfully!');
   
                 refreshSchedules();
               })
@@ -81,9 +83,12 @@ export default function RemoveAppointment() {
     });
 
     return(
-      <ScrollView>
-      { appointments }
-      </ScrollView>
+      <>
+        <ScrollView>
+          { appointments }
+        </ScrollView>
+      <Toast />
+      </>
     );
 }
 

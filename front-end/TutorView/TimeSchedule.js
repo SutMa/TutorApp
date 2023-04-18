@@ -241,10 +241,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: '80%',
-    marginTop: 40,
+    marginTop: 20,
   },
   title: {
     fontSize: 20,
+    fontWeight: 'bold',
     marginTop: 0,
     marginBottom: 10,
     marginLeft: 40,

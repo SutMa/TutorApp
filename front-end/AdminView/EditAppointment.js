@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, ScrollView, Button, TextInput } from "react-native";
+import { View, Text, ScrollView, Button, TextInput, StyleSheet} from "react-native";
 import ScrollPicker from "react-native-wheel-scrollview-picker";
 import { docExists, getDocById } from "../controllers/firebaseCrud";
 import { USER_PATH, USER_TYPES } from "../controllers/auth/user";
@@ -71,30 +71,33 @@ export default function EditAppointment() {
 
   return (
     <>
-      <View>
-        <Text>Add an Appointment</Text>
-        <Text>Tutor Email</Text>
+      <View style={styles.container}>
+        <View style={styles.titleContainer}><Text style={styles.Title}>Edit Appointment</Text></View>
+
+        <ScrollView>
+        <View>
+        <Text style={styles.label}>Tutor Email</Text>
         <TextInput
+          style={styles.input}
           placeholder='Tutor Email Address'
           keyboardType='email-address'
           backgroundColor='#fbfbfb'
-          width={280}
           maxLength={40}
-          onChangeText={text => setPrevTutorEmail(text)}>
-        </TextInput>
-        <Text>Student Email</Text>
+          onChangeText={text => setPrevTutorEmail(text)}
+        />
+  
+        <Text style={styles.label}>Student Email</Text>
         <TextInput
+          style={styles.input}
           placeholder='Student Email Address'
           keyboardType='email-address'
           backgroundColor='#fbfbfb'
-          width={280}
           maxLength={40}
-          onChangeText={text => setPrevStudentEmail(text)}>
-        </TextInput>
-        <Text>Select the day and time</Text>
-        <View style={[{
-          flexDirection: 'row',
-        }]}>
+          onChangeText={text => setPrevStudentEmail(text)}
+        />
+  
+        <Text style={styles.label}>Select the day and time</Text>
+        <View style={styles.pickerContainer}>
           <ScrollView>
             <ScrollPicker
               dataSource={prevStateDays}
@@ -108,7 +111,7 @@ export default function EditAppointment() {
               onValueChange={(data, selectedIndex) => {
                 const newprevStateDays = [...prevStateDays];
                 newprevStateDays[selectedIndex] = data;
-
+  
                 setPrevStateDays(newprevStateDays);
                 setPrevCurrentDayIndex(selectedIndex);
                 setPrevCurrentDay(data);
@@ -128,19 +131,16 @@ export default function EditAppointment() {
               onValueChange={(data, selectedIndex) => {
                 const newprevStateHours = [...prevStateHours];
                 newprevStateHours[selectedIndex] = data;
-
+  
                 setPrevStateHours(newprevStateHours);
                 setPrevCurrentTimeIndex(selectedIndex);
               }}
             />
           </ScrollView>
         </View>
-
-        <Text>Set the new appointment day and time</Text>
-
-        <View style={[{
-          flexDirection: 'row',
-        }]}>
+  
+        <Text style={styles.label}>Set the new appointment day and time</Text>
+        <View style={styles.pickerContainer}>
           <ScrollView>
             <ScrollPicker
               dataSource={postStateDays}
@@ -154,13 +154,14 @@ export default function EditAppointment() {
               onValueChange={(data, selectedIndex) => {
                 const newpostStateDays = [...postStateDays];
                 newpostStateDays[selectedIndex] = data;
-
+  
                 setPostStateDays(newpostStateDays);
                 setPostCurrentDayIndex(selectedIndex);
                 setPostCurrentDay(data);
               }}
             />
           </ScrollView>
+         
           <ScrollView>
             <ScrollPicker
               dataSource={postStateHours}
@@ -174,16 +175,64 @@ export default function EditAppointment() {
               onValueChange={(data, selectedIndex) => {
                 const newpostStateHours = [...postStateHours];
                 newpostStateHours[selectedIndex] = data;
-
+  
                 setPostStateHours(newpostStateHours);
                 setPostCurrentTimeIndex(selectedIndex);
               }}
             />
           </ScrollView>
+          </View>
         </View>
+        </ScrollView>
         <Button onPress={createAppointment} title='Edit Appointment' />
       </View>
     <Toast />
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+    marginTop: 15,
+  },
+  titleContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: 'black',
+    paddingBottom:10,
+  },
+  Title: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    marginTop: 0,
+    marginBottom: 10,
+    marginLeft: 40,
+    marginRight: 40,
+    textAlign: 'center',
+  },
+  label: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 20,
+    alignSelf: 'flex-start'
+  },
+  input: {
+    height: 40,
+    width: '100%',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    padding: 10,
+    marginTop: 10,
+    borderRadius: 5
+  },
+  pickerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    marginTop: 20
+  }
+});

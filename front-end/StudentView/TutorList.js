@@ -85,7 +85,7 @@ export default function TutorList() {
           let currentHour = 0;
 
           availableButtons.push(
-            <Text style={{ fontSize: '20', textTransform: 'capitalize' }} key={day}>{ day }:</Text>
+            <Text style={{ fontSize: 20, textTransform: 'capitalize' }} key={day}>{ day }:</Text>
           );
           tutor.days[day].forEach(hour => {
 

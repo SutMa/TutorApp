@@ -42,7 +42,7 @@ export default function UserAppointments() {
         let nextHourTextSuffix = (nextHour >= 12) ? 'PM' : 'AM';
 
         appointments.push(
-          <View key={`${user.email}-${status}-${hour}-${nextHour}`}>
+          <View key={`${user.email}-${day}-${status}-${hour}-${nextHour}`}>
             <View style={styles.innerBox}>
               <Text style={styles.tutorText}>{`Meeting with ${status} from`}</Text>
               <Text style={styles.tutorTime}>{`${hourText} ${hourTextSuffix} - ${nextHourText} ${nextHourTextSuffix}`}</Text>

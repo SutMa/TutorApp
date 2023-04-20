@@ -45,7 +45,8 @@ export default function TutorList() {
             <Text>Loading</Text>
         )
     }
-
+    
+    
     const createAppointment = (tutor, day, hourIndex, printTime) => {
       Alert.alert('Schedule Appointment', `Are you sure you want to schedule an appointment at ${printTime} with ${tutor}?`, [
         {
@@ -84,7 +85,7 @@ export default function TutorList() {
           let currentHour = 0;
 
           availableButtons.push(
-            <Text key={day} >{ day }</Text>
+            <Text style={{ fontSize: '20', textTransform: 'capitalize' }} key={day}>{ day }:</Text>
           );
           tutor.days[day].forEach(hour => {
 
@@ -117,7 +118,7 @@ export default function TutorList() {
                 { availableButtons }
             </View>
         );
-
+            
         tutorsElement.push(
             <View key={i}>
                 <Pressable style={[styles.pressable, isOpen && styles.openContainer]} onPress={() => {
@@ -126,128 +127,152 @@ export default function TutorList() {
                 }}>
                     <Text style={styles.names}>{ tutors[i].id }</Text>
                     <Text style={styles.subjects}>{ tutors[i].subject }</Text>
-                    <View style={[styles.rating, isOpen && styles.ratingsOpen]}>
+                    <View style={styles.rating}>
                         <Text style={styles.ratingNum}>{ tutors[i].avg }</Text>
                     </View>
-                    <Text style={[styles.options, isOpen && styles.optionsOpen]}>⋮</Text>
+                    <Text style={styles.options}>⋮</Text>
                     <Image source={{ uri:(tutors[i].profilePicUrl ?? USER_DEFAULT_PROFILE_PIC_URI)}} style={[styles.profiles, isOpen && styles.profilesOpen]}/>
-                </Pressable>
+                
                 {isOpen && (
                     <View style={styles.dropdownContainer}>
+                        <View style={styles.pheadingContainer}><Text style={styles.pheading}>Available Times</Text></View>
                         {dropdownContent}
                     </View>
                 )}
+                </Pressable>
             </View>
         );
     }
 
-    return(
-        <ScrollView>
+    return (
+        <View>
+          <View style={styles.titleContainer}><Text style={styles.Title}>Schedule an appointment</Text></View>
+          <ScrollView>
             <View style={styles.container}>
-                { tutorsElement }
+              { tutorsElement }
             </View>
-        </ScrollView>
-    );
+          </ScrollView>
+        </View>
+      );
+      
 }
 
 const styles = StyleSheet.create({
     pressable: {
-        width: 360,
-        height: 80,
-        padding: 10,
-        margin: 10,
-        backgroundColor: '#FFF',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-    
-        elevation: 5,
-        borderRadius: 15,
+      width: 360,
+      height: 80,
+      padding: 10,
+      margin: 10,
+      backgroundColor: '#FFF',
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+  
+      elevation: 5,
+      borderRadius: 15,
+      position: 'relative',
     },
     container: {
-        margin: 50,
-        flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
+      margin: 50,
+      marginTop:20,
+      flex: 1,
+      justifyContent: 'flex-start',
+      alignItems: 'center',
     },
-    names: {
-        fontSize: 21,
+    titleContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderBottomWidth: 1,
+        borderBottomColor: 'black',
+        paddingBottom:10,
+        marginTop: 25,
+      },
+      Title: {
+        fontWeight: 'bold',
+        fontSize: 20,
+        marginTop: 0,
+        marginBottom: 10,
+        marginLeft: 40,
+        marginRight: 40,
         textAlign: 'center',
+      },
+      pheadingContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderTopWidth: 1,
+        borderTopColor: 'black',
+      },
+      pheading: {
+        fontWeight: 'bold',
+        fontSize: 20,
+        marginTop: 0,
+        marginLeft: 40,
+        marginRight: 40,
+        textAlign: 'center',
+        marginTop: 4,
+      },
+    names: {
+      fontSize: 21,
+      textAlign: 'center',
     },
     profiles: {
-        position: 'relative',
-        bottom: '175%',
-        width: 60,
-        height: 60,
-        resizeMode: 'contain',
-        borderRadius: 50,
+      width: 60,
+      height: 60,
+      borderRadius: 50,
+      marginTop: -42,
     },
     subjects: {
-        fontSize: 15,
-        margin: 5,
-        color: '#484848',
-        textAlign: 'center',
-        fontStyle: 'italic',
+      fontSize: 15,
+      margin: 5,
+      color: '#484848',
+      textAlign: 'center',
+      fontStyle: 'italic',
     },
     rating: {
-        width: 30,
-        height: 30,
-        bottom: '65%',
-        left: '85%',
-        backgroundColor: '#484848',
-        borderRadius: 20,
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: '#FFF',
-
+      width: 30,
+      height: 30,
+      backgroundColor: '#484848',
+      borderRadius: 20,
+      justifyContent: 'center',
+      color: '#FFF',
+      marginTop: -4,
+      marginLeft: 295,
+      marginTop:-38,
     },
     ratingNum: {
-        textAlign: 'center',
-        fontSize: 16,
-        color: '#FFF',
+      textAlign: 'center',
+      fontSize: 16,
+      color: '#FFF',
     },
     options: {
-        textAlign: 'center',
-        justifyContent: 'center',
-        left: '48%',
-        bottom: '103%',
-        fontSize: 23,
-        fontStyle: 'bold',
-        color: '#000',
+      fontSize: 23,
+      marginLeft: 330,
+      marginTop: -23,
     },
     dropdownContent: {
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: 10,
-        marginLeft: 30,
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginTop:-15,
     },
     dropdownContainer: {
-        width: '100%',
-        paddingTop: 10,
+      width: '100%',
+      paddingTop: 10,
     },
     dropdownHeader: {
-        fontSize: 17,
-        textAlign: 'center',
-        marginLeft: '40%',
-        bottom: '600%',
-        textDecorationLine: 'underline'
+      fontSize: 17,
+      textAlign: 'center',
+      marginLeft: '40%',
+      bottom: '600%',
+      textDecorationLine: 'underline'
     },
     openContainer: {
-        height: 'auto',
+      height: 'auto',
     },
-    profilesOpen: {
-        bottom: '63.75%',
-    },
-    ratingsOpen: {
-        bottom: '23.75%',
-    },
-    optionsOpen: {
-        bottom: '37.5%',
-        color: '#FFF',
-    }
-});
+  });
+  
+  

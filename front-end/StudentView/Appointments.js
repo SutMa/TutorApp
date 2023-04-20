@@ -1,5 +1,5 @@
 import { startTransition, useEffect, useState } from 'react';
-import { View, ScrollView, Text } from 'react-native';
+import { View, ScrollView, Text, StyleSheet } from 'react-native';
 import { DAYS, getAllTimeSchedule } from '../controllers/tutor/tutorController';
 import { getUserStorage } from '../controllers/auth/user';
 
@@ -48,7 +48,8 @@ export default function Appointments() {
                     let nextHourTextSuffix = (nextHour >= 12) ? 'PM' : 'AM';
 
                     myAppointmentsElement.push(
-                        <Text key={`${day}-${currentHour}`}>{ day }TutorName: { id } | Time { hourText }:{ hourTextSuffix }-{ nextHourText }:{ nextHourTextSuffix }</Text>
+                        <Text style={styles.innerBox} key={`${day}-${currentHour}`}>{ day } TutorName: { id }                         Time { hourText }:{ hourTextSuffix }-{ nextHourText }:{ nextHourTextSuffix }</Text>
+                        
                     );
                 }
 
@@ -59,9 +60,34 @@ export default function Appointments() {
 
     return(
         <ScrollView>
-            <View>
+            <View stlye={styles.container}>
                 { myAppointmentsElement }
             </View>
         </ScrollView>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+      flexDirection: 'column',
+      backgroundColor: "white",
+    }, 
+   innerBox: {
+      backgroundColor: "#FFF",
+      borderRadius: 15,
+      padding:5,
+      margin: 4,
+      padding: 10,
+      shadowColor: 'black',
+      shadowOpacity: .5,
+      elevation: 10,
+      shadowOffset:{
+        width: 1,
+        height: 2
+      },
+      height: 60,
+      margin: 8,
+      textAlign: "center",
+      
+     }
+});

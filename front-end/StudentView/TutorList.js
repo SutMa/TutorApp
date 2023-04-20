@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
       width: 60,
       height: 60,
       borderRadius: 50,
-      marginTop: -42,
+      marginTop: -60,
     },
     subjects: {
       fontSize: 15,

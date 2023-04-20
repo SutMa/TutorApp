@@ -50,6 +50,7 @@ export default function TutorReview(props) {
             <TextInput onChangeText={text => setTutorEmail(text)} placeholder='Tutor Email'></TextInput>
             <ScrollView>
             <ScrollPicker
+                style={styles.scrollPicker}
                 dataSource={reviewNumbers}
                 selectedIndex={initReviewNumber}
                 wrapperHeight={180}
@@ -73,10 +74,10 @@ export default function TutorReview(props) {
                 numberOfLines={4}
                 maxLength={40}
                 onChangeText={text => setReviewText(text)}
-                padding={10}
+               
             />
 
-          <Button title='Submit Review' onPress={submitReview} />
+          <Button style={styles.submitButton} title='Submit Review' onPress={submitReview} />
         </View>
       <Toast />
       </>
@@ -90,7 +91,32 @@ const styles = StyleSheet.create({
       borderRadius: 10,
       padding: 10,
     },
+    
     multilineTextInput: {
-        borderWidth: 5,
+        marginTop: 30,
+        borderRadius: 15,
+        backgroundColor: "white",
+        paddingBottom: 200,
+        shadowColor: 'black',
+        shadowOpacity: .5,
+        elevation: 10,
+        shadowOffset:{
+            width: 1,
+            height: 2
+        },
+
+        
+    },
+
+    submitButton: {
+        width: 10,
+        borderRadius: 15,
+        
+
+
+    },
+    scrollPicker: {
+        borderRadius: 15,
+        //Still working on this  - Sut
     }
   });

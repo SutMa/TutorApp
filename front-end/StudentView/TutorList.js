@@ -7,7 +7,7 @@ import { showToast } from '../util';
 
 export default function TutorList() {
     const [tutors, setTutors] = useState(undefined);
-    const [openDropdown, setOpenDropdown] = useState(null);
+    const [openDropdown, setOpenDropdown] = useState(undefined);
     const [user, setUser] = useState(undefined);
 
     const refreshSchedules = () => {
@@ -27,6 +27,7 @@ export default function TutorList() {
                 });
 
                 setTutors(innerTutors);
+                setOpenDropdown(Array(innerTutors.length).fill(false));
               });
             });
         });
@@ -40,7 +41,7 @@ export default function TutorList() {
         });
     }, []);
 
-    if(user === undefined || tutors === undefined) {
+    if(user === undefined || tutors === undefined || openDropdown === undefined) {
         return(
             <Text>Loading</Text>
         )
@@ -79,17 +80,26 @@ export default function TutorList() {
         const tutor = tutors[i];
         const availableButtons = [];
 
+        
+        let availableTimesJsx = <View style={styles.pheadingContainer}><Text style={styles.pheading}>Tutor Has No Avialability</Text></View>;
+
         Object.keys(DAYS).forEach(key => {
           const day = DAYS[key];
           const startHour = 9;
           let currentHour = 0;
 
-          availableButtons.push(
-            <Text style={{ fontSize: 20, textTransform: 'capitalize' }} key={day}>{ day }:</Text>
-          );
-          tutor.days[day].forEach(hour => {
+          
+          let anyAvailability = false;
 
+          tutor.days[day].forEach(hour => {
             if(hour === HOUR_STATUS.AVAILABLE) {
+              if(!anyAvailability) {
+                anyAvailability = true;
+                availableButtons.push(
+                  <Text style={{ fontSize: 20, textTransform: 'capitalize' }} key={day}>{ day }:</Text>
+                );
+                availableTimesJsx = <View style={styles.pheadingContainer}><Text style={styles.pheading}>Available Times</Text></View>;
+              }
 
               let hour = startHour + currentHour;
               let hourIndexText = `${currentHour}`;
@@ -101,9 +111,13 @@ export default function TutorList() {
               let printTime = `${hourText} ${hourTextSuffix}-${nextHourText} ${nextHourTextSuffix}`;
             
               availableButtons.push(
-                <Button key={ `${tutor.id}-${day}-${currentHour}` }onPress={() => {
+                <Pressable style={styles.buttonTime} key={ `${tutor.id}-${day}-${currentHour}` } 
+                onPress={() => {
                   createAppointment(tutor.id, day, hourIndexText, printTime);
-                }} title={ printTime }></Button>
+                }}
+                >
+                  <Text style={styles.buttonTextTime}>{ printTime }</Text>
+                </Pressable>
               );
             }
 
@@ -111,19 +125,25 @@ export default function TutorList() {
           });
         });
 
-        const isOpen = openDropdown === i;
-        const dropdownContent = (
-            <View style={styles.dropdownContent}>
-                <Text style={styles.dropdownHeader}>Available Times</Text>
-                { availableButtons }
-            </View>
-        );
+        let openJsx;
+        if(openDropdown[i]) {
+            openJsx = (
+              <View style={styles.dropdownContainer}>
+                { availableTimesJsx }
+                <View style={styles.dropdownContent}>
+                    { availableButtons }
+                </View>
+              </View>
+            );
+        }
             
         tutorsElement.push(
             <View key={i}>
-                <Pressable style={[styles.pressable, isOpen && styles.openContainer]} onPress={() => {
+                <Pressable style={[styles.pressable, styles.openContainer]} onPress={() => {
                     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut); 
-                    setOpenDropdown(isOpen ? null : i)
+                    const newDropdown = [...openDropdown];
+                    newDropdown[i] = !newDropdown[i];
+                    setOpenDropdown(newDropdown);
                 }}>
                     <Text style={styles.names}>{ tutors[i].id }</Text>
                     <Text style={styles.subjects}>{ tutors[i].subject }</Text>
@@ -131,28 +151,25 @@ export default function TutorList() {
                         <Text style={styles.ratingNum}>{ tutors[i].avg }</Text>
                     </View>
                     <Text style={styles.options}>⋮</Text>
-                    <Image source={{ uri:(tutors[i].profilePicUrl ?? USER_DEFAULT_PROFILE_PIC_URI)}} style={[styles.profiles, isOpen && styles.profilesOpen]}/>
-                
-                {isOpen && (
-                    <View style={styles.dropdownContainer}>
-                        <View style={styles.pheadingContainer}><Text style={styles.pheading}>Available Times</Text></View>
-                        {dropdownContent}
-                    </View>
-                )}
+                    <Image source={{ uri:(tutors[i].profilePicUrl ?? USER_DEFAULT_PROFILE_PIC_URI)}} style={[styles.profiles]}/>
+                    { openJsx }   
                 </Pressable>
             </View>
         );
     }
 
     return (
-        <View>
-          <View style={styles.titleContainer}><Text style={styles.Title}>Schedule an appointment</Text></View>
-          <ScrollView>
-            <View style={styles.container}>
-              { tutorsElement }
-            </View>
-          </ScrollView>
-        </View>
+        <>
+          <View>
+            <View style={styles.titleContainer}><Text style={styles.Title}>Schedule an appointment</Text></View>
+            <ScrollView>
+              <View style={styles.container}>
+                { tutorsElement }
+              </View>
+            </ScrollView>
+          </View>
+          <Toast />
+        </>
       );
       
 }
@@ -175,6 +192,25 @@ const styles = StyleSheet.create({
       elevation: 5,
       borderRadius: 15,
       position: 'relative',
+    },
+    buttonTime: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingVertical: 12,
+      paddingHorizontal: 32,
+      borderRadius: 4,
+      elevation: 3,
+      backgroundColor: 'gray',
+      width: 200,
+      height: 50,
+      margin: 3,
+    },
+    buttonTextTime: {
+      fontSize: 16,
+      lineHeight: 21,
+      fontWeight: 'bold',
+      letterSpacing: 0.25,
+      color: 'white',
     },
     container: {
       margin: 50,
@@ -205,6 +241,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderTopWidth: 1,
         borderTopColor: 'black',
+        height: 60,
       },
       pheading: {
         fontWeight: 'bold',

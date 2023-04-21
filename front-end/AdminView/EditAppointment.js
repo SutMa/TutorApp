@@ -98,7 +98,8 @@ export default function EditAppointment() {
   
         <Text style={styles.label}>Select the day and time</Text>
         <View style={styles.pickerContainer}>
-          <ScrollView>
+          <ScrollView
+            nestedScrollEnabled={true}>
             <ScrollPicker
               dataSource={prevStateDays}
               selectedIndex={prevCurrentDayIndex}
@@ -118,7 +119,8 @@ export default function EditAppointment() {
               }}
             />
           </ScrollView>
-          <ScrollView>
+          <ScrollView
+            nestedScrollEnabled={true}>
             <ScrollPicker
               dataSource={prevStateHours}
               selectedIndex={prevCurrentTimeIndex}
@@ -141,7 +143,8 @@ export default function EditAppointment() {
   
         <Text style={styles.label}>Set the new appointment day and time</Text>
         <View style={styles.pickerContainer}>
-          <ScrollView>
+          <ScrollView
+            nestedScrollEnabled={true}>
             <ScrollPicker
               dataSource={postStateDays}
               selectedIndex={postCurrentDayIndex}
@@ -162,7 +165,8 @@ export default function EditAppointment() {
             />
           </ScrollView>
          
-          <ScrollView>
+          <ScrollView
+            nestedScrollEnabled={true}>
             <ScrollPicker
               dataSource={postStateHours}
               selectedIndex={postCurrentTimeIndex}

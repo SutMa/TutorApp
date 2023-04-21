@@ -48,8 +48,10 @@ export default function Appointments() {
                     let nextHourTextSuffix = (nextHour >= 12) ? 'PM' : 'AM';
 
                     myAppointmentsElement.push(
-                        <Text style={styles.innerBox} key={`${day}-${currentHour}`}>{ day } TutorName: { id }                         Time { hourText }:{ hourTextSuffix }-{ nextHourText }:{ nextHourTextSuffix }</Text>
-                        
+                        <View style={styles.innerBox} key={`${day}-${currentHour}`}>
+                          <Text style={styles.innerBoxText}>Tutor: { id }</Text>
+                          <Text style={styles.innerBoxBoldText}>{day.charAt(0).toUpperCase() + day.slice(1)} { hourText }:{ hourTextSuffix }-{ nextHourText }:{ nextHourTextSuffix }</Text>
+                        </View>
                     );
                 }
 
@@ -60,6 +62,7 @@ export default function Appointments() {
 
     return(
         <ScrollView>
+            <View style={styles.titleContainer}><Text style={styles.Title}>Your Appointments</Text></View>
             <View stlye={styles.container}>
                 { myAppointmentsElement }
             </View>
@@ -72,6 +75,21 @@ const styles = StyleSheet.create({
       flexDirection: 'column',
       backgroundColor: "white",
     }, 
+    titleContainer: {
+        borderBottomWidth: 1,
+        borderBottomColor: 'black',
+        paddingBottom:10,
+        marginTop: 25,
+    },
+    Title: {
+      fontWeight: 'bold',
+      fontSize: 20,
+      marginTop: 0,
+      marginBottom: 10,
+      marginLeft: 40,
+      marginRight: 40,
+      textAlign: 'center',
+    },
    innerBox: {
       backgroundColor: "#FFF",
       borderRadius: 15,
@@ -87,7 +105,12 @@ const styles = StyleSheet.create({
       },
       height: 60,
       margin: 8,
+  },
+  innerBoxText: {
       textAlign: "center",
-      
-     }
+  },
+  innerBoxBoldText: {
+      textAlign: "center",
+      fontWeight: 'bold',
+  }
 });

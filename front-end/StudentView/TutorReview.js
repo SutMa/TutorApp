@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ScrollView, StyleSheet, View, Text, TextInput, Button } from "react-native";
+import { View, ScrollView, StyleSheet, Text, TextInput, Pressable, Dimensions } from "react-native";
 import ScrollPicker from 'react-native-wheel-scrollview-picker';
 import { createReview, reviewExists } from "../controllers/review/reviewController";
 import { showToast } from '../util';
@@ -46,9 +46,26 @@ export default function TutorReview(props) {
     return(
       <>
         <View style={styles.container}>
-            <Text>Write a review</Text>
-            <TextInput onChangeText={text => setTutorEmail(text)} placeholder='Tutor Email'></TextInput>
-            <ScrollView>
+        <ScrollView>
+            <View style={styles.titleContainer}><Text style={styles.Title}>Write a Review</Text></View>
+            <TextInput
+              style={styles.input}
+              placeholder='Tutor Email Address'
+              keyboardType='email-address'
+              backgroundColor='#fbfbfb'
+              maxLength={40}
+              onChangeText={text => setTutorEmail(text)}
+            />
+            <TextInput style={styles.multilineTextInput}
+                editable
+                multiline
+                numberOfLines={4}
+                maxLength={40}
+                placeholder={'Write Your Review...'}
+                onChangeText={text => setReviewText(text)}
+            />
+            <ScrollView
+              nestedScrollEnabled={true}>
             <ScrollPicker
                 style={styles.scrollPicker}
                 dataSource={reviewNumbers}
@@ -68,16 +85,10 @@ export default function TutorReview(props) {
                 }}
             />
             </ScrollView>
-            <TextInput style={styles.multilineTextInput}
-                editable
-                multiline
-                numberOfLines={4}
-                maxLength={40}
-                onChangeText={text => setReviewText(text)}
-               
-            />
-
-          <Button style={styles.submitButton} title='Submit Review' onPress={submitReview} />
+            <Pressable style={styles.submitButton} onPress={submitReview}>
+              <Text style={styles.submitButtonText}>Submit Review</Text>
+            </Pressable>
+        </ScrollView>
         </View>
       <Toast />
       </>
@@ -87,36 +98,59 @@ export default function TutorReview(props) {
 
 const styles = StyleSheet.create({
     container: {
-      flexDirection: 'column',
-      borderRadius: 10,
+      flex: 1,
+      alignSelf: 'stretch',
+    },
+    input: {
+      height: 40,
+      borderColor: '#ccc',
+      borderWidth: 1,
       padding: 10,
+      marginTop: 10,
+      borderRadius: 5,
+      margin: 20,
     },
-    
-    multilineTextInput: {
-        marginTop: 30,
-        borderRadius: 15,
-        backgroundColor: "white",
-        paddingBottom: 200,
-        shadowColor: 'black',
-        shadowOpacity: .5,
-        elevation: 10,
-        shadowOffset:{
-            width: 1,
-            height: 2
-        },
-
-        
+    titleContainer: {
+        borderBottomWidth: 1,
+        borderBottomColor: 'black',
+        paddingBottom:10,
+        marginTop: 25,
     },
-
+    Title: {
+      fontWeight: 'bold',
+      fontSize: 20,
+      marginTop: 0,
+      marginBottom: 10,
+      marginLeft: 40,
+      marginRight: 40,
+      textAlign: 'center',
+    },
     submitButton: {
-        width: 10,
-        borderRadius: 15,
-        
-
-
+      alignSelf: 'center',
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingVertical: 12,
+      paddingHorizontal: 32,
+      borderRadius: 4,
+      elevation: 3,
+      backgroundColor: 'gray',
+      width: 200,
+      height: 50,
+      margin: 15, 
     },
-    scrollPicker: {
-        borderRadius: 15,
-        //Still working on this  - Sut
-    }
-  });
+    submitButtonText: {
+      fontSize: 16,
+      lineHeight: 21,
+      fontWeight: 'bold',
+      letterSpacing: 0.25,
+      color: 'white',
+    },
+    multilineTextInput: {
+      backgroundColor: 'white',
+      borderWidth: 2,
+      borderRadius: 7,
+      margin: 10,
+      paddingLeft: 10,
+      paddingRight: 10,
+    },
+});

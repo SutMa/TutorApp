@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Text, View, StyleSheet, ScrollView, SafeAreaView} from 'react-native'; 
 import { getUserStorage } from "../controllers/auth/user";
 import {DAYS, getTimeScheduleById, HOUR_STATUS} from "../controllers/tutor/tutorController";
+import { capitolFirstLetter } from "../util";
 
 export default function UserAppointments() {
   const [user, setUser] = useState(undefined);
@@ -45,7 +46,7 @@ export default function UserAppointments() {
           <View key={`${user.email}-${day}-${status}-${hour}-${nextHour}`}>
             <View style={styles.innerBox}>
               <Text style={styles.tutorText}>{`Meeting with ${status} from`}</Text>
-              <Text style={styles.tutorTime}>{`${hourText} ${hourTextSuffix} - ${nextHourText} ${nextHourTextSuffix}`}</Text>
+              <Text style={styles.tutorTime}>{`${capitolFirstLetter(day)} ${hourText} ${hourTextSuffix} - ${nextHourText} ${nextHourTextSuffix}`}</Text>
             </View>
           </View>
         );

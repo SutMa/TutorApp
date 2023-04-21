@@ -130,7 +130,9 @@ export default function LoginButton() {
 
   if(user.role === USER_TYPES.TUTOR) {
     subjectPicker = (
-      <ScrollView style={styles.scrollview}>
+      <ScrollView 
+        nestedScrollEnabled={true}
+        style={styles.scrollview}>
         <ScrollPicker
           dataSource={currentSubjects}
           selectedIndex={currentSubjectIndex}
@@ -174,7 +176,8 @@ export default function LoginButton() {
 
   return (
     <>
-      <View style={[styles.container, { paddingBottom: 80 }]}>
+      <ScrollView>
+      <View style={[styles.container, { paddingBottom: 30 }]}>
         <Text style={styles.welcome}>Welcome, { user.email }!</Text>
         <View style={styles.imageContainer}>
           <Button title='Pick a profile picture' onPress={pickImage} />
@@ -195,6 +198,7 @@ export default function LoginButton() {
           <Text style={styles.buttonText}>Logout</Text>
         </TouchableOpacity>
       </View>
+      </ScrollView>
     <Toast />
     </>
   );
@@ -202,16 +206,17 @@ export default function LoginButton() {
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
+    flex: 1,
     alignItems: 'center',
   },
   button: {
+    alignSelf: 'center',
     backgroundColor: '#d3d3d3',
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 5,
     width: '50%',
-    marginTop: 20, // add margin to the top
+    margin: 10,
   },
   buttonText: {
     fontSize: 18,
@@ -222,28 +227,21 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold', // make the text bold
     color: '#736B92', // welcome color English violet
-    marginBottom: 20, // add margin to the bottom
+    marginBottom: 10,
   },
   image: {
     width: 200,
     height: 200,
     resizeMode: 'contain', // adjust the image size and aspect ratio
-    marginVertical: 10, // add margin to the top and bottom
   },
   role: {
     color: 'blue',
     fontSize: 18,
     fontWeight: 'bold',
-    marginVertical: 10,
-  },
-
-  scrollview: {
-    flexGrow: 0, // 
   },
   scrollviewContentContainer: {
-    height: 60, // the same as itemHeight 
+    margin: 10,
   },
-
   item: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -262,6 +260,4 @@ const styles = StyleSheet.create({
     color: '#FFFFFF', // the color of highlight subject
     fontWeight: 'bold', // bold the highlight subject
   },
-  
-  
 });

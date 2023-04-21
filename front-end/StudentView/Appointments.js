@@ -2,6 +2,7 @@ import { startTransition, useEffect, useState } from 'react';
 import { View, ScrollView, Text, StyleSheet } from 'react-native';
 import { DAYS, getAllTimeSchedule } from '../controllers/tutor/tutorController';
 import { getUserStorage } from '../controllers/auth/user';
+import { capitolFirstLetter } from '../util';
 
 export default function Appointments() {
     const [schedules, setSchedules] = useState(undefined);
@@ -50,7 +51,7 @@ export default function Appointments() {
                     myAppointmentsElement.push(
                         <View style={styles.innerBox} key={`${day}-${currentHour}`}>
                           <Text style={styles.innerBoxText}>Tutor: { id }</Text>
-                          <Text style={styles.innerBoxBoldText}>{day.charAt(0).toUpperCase() + day.slice(1)} { hourText }:{ hourTextSuffix }-{ nextHourText }:{ nextHourTextSuffix }</Text>
+                          <Text style={styles.innerBoxBoldText}>{capitolFirstLetter(day)} { hourText }:{ hourTextSuffix }-{ nextHourText }:{ nextHourTextSuffix }</Text>
                         </View>
                     );
                 }

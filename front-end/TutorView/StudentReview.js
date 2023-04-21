@@ -30,7 +30,7 @@ export default function StudentReview(props) {
     reviewsJsx.push(
       <View key={review.id} style={styles.reviewContainer}>
         <Text style={styles.reviewText}>
-          User {review.studentEmail} gave you {review.avg}? stars
+          User {review.studentEmail} gave you { review.reviewNumber } stars
         </Text>
         <Text style={styles.reviewText}>Comment: {review.reviewText}</Text>
       </View>

@@ -223,6 +223,7 @@ const styles = StyleSheet.create({
     container: {
       margin: 50,
       marginTop:20,
+      marginBottom: 100,
       flex: 1,
       justifyContent: 'flex-start',
       alignItems: 'center',

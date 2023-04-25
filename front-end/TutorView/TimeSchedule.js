@@ -101,7 +101,7 @@ export default function TimeSchedule() {
 
     setTimeSchedule(email, newSchedule)
       .then(_res => {
-        showToast('success', 'Created Appointment', 'Successfully updated schedule!');
+        showToast('success', 'Updated Schedule', 'Successfully updated schedule!');
       })
       .catch(_err => {
         showToast('error', 'Unknown Error', 'Failed to update schedule!')

@@ -37,8 +37,10 @@ export default function LoginButton() {
       quality: 1,
     });
 
+    console.log(result);
+
     if (!result.cancelled) {
-      setImage(result.assets[0].uri);
+      setImage(result.uri);
     }
   }
 

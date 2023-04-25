@@ -1,5 +1,13 @@
 {
   "projects": {
     "default": "tutor4330-da562"
+  },
+  "targets": {},
+  "etags": {
+    "tutor4330-da562": {
+      "extensionInstances": {
+        "firestore-send-email": "c76f1582b82a0ae161182695ec342d58a988aa9ba11828437b100781616e6a80"
+      }
+    }
   }
 }

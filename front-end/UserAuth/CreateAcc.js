@@ -7,6 +7,7 @@ import RadioButtonGroup, { RadioButtonItem } from "expo-radio-button";
 import { AUTH_ROUTES } from '../Routes';
 import Toast from 'react-native-toast-message';
 import { showToast } from '../util';
+import { sendEmail } from '../controllers/email/emailController';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -59,8 +60,12 @@ const Login = () => {
         role: userTypeText,
       });
 
+      // NOTE: sending email to user
+      await sendEmail(caseInsensitiveEmail, 'Account Creation', `Hi, ${caseInsensitiveEmail} thank you for creating a ${userTypeText} account!`);
+
       navigation.replace(AUTH_ROUTES.ROOT_USERS);
     }catch(err) {
+      console.error(err);
       showToast('error', 'Invalid Email', 'Account with email already exists!');
     }
   };

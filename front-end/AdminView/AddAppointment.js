@@ -6,6 +6,7 @@ import { USER_PATH, USER_TYPES } from "../controllers/auth/user";
 import { getTimeScheduleById, DAYS, HOUR_STATUS, setTimeSchedule} from "../controllers/tutor/tutorController";
 import Toast from "react-native-toast-message";
 import { showToast } from "../util"; 
+import { sendEmail } from "../controllers/email/emailController";
 
 export default function AddAppointment() {
   const hours = ['9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM'];
@@ -43,6 +44,13 @@ export default function AddAppointment() {
           await setTimeSchedule(tutorEmail, schedule);
 
           showToast('success', 'Appointment Created', 'The apointment was created successfully!');
+
+          sendEmail(tutorEmail, 'Appointment Creation', `An appointment was created with ${studentEmail} on ${currentDay} at ${stateHours[currentTimeIndex]} by the system admin!`)
+            .then(() => {})
+            .catch(err => console.error(err));
+          sendEmail(studentEmail, 'Appointment Creation', `An appointment was created with ${tutorEmail} on ${currentDay} at ${stateHours[currentTimeIndex]} by the system admin!`)
+            .then(() => {})
+            .catch(err => console.error(err));
         } else {
           showToast('error', 'Tutor Unavailable', 'The tutor is unavailable at this time!');
         }

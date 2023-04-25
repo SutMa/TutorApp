@@ -6,6 +6,7 @@ import { USER_PATH, USER_TYPES } from "../controllers/auth/user";
 import { getTimeScheduleById, DAYS, HOUR_STATUS, setTimeSchedule} from "../controllers/tutor/tutorController";
 import Toast from "react-native-toast-message";
 import { showToast } from "../util";
+import { sendEmail } from "../controllers/email/emailController";
 
 export default function EditAppointment() {
   const hours = ['9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM'];
@@ -61,6 +62,15 @@ export default function EditAppointment() {
             await setTimeSchedule(prevTutorEmail, schedule);
       
             showToast('success', 'Appointment Edited', 'Appointment was changed successfully!');
+
+            sendEmail(prevTutorEmail, 'Appointment Edited', 
+                `Your appointment with ${prevStudentEmail} has been changed from ${prevCurrentDay} at ${hours[prevCurrentTimeIndex]} to ${postCurrentDay} at ${hours[postCurrentTimeIndex]} by the system admin!`)
+              .then(() => {})
+              .catch(err => console.error(err));
+            sendEmail(prevStudentEmail, 'Appointment Edited', 
+                `Your appointment with ${prevTutorEmail} has been changed from ${prevCurrentDay} at ${hours[prevCurrentTimeIndex]} to ${postCurrentDay} at ${hours[postCurrentTimeIndex]} by the system admin!`)
+              .then(() => {})
+              .catch(err => console.error(err));
           }
         }
       }

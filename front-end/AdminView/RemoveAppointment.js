@@ -3,6 +3,7 @@ import { View, Alert, Text, Button, ScrollView, StyleSheet } from 'react-native'
 import { getTimeScheduleById, setTimeSchedule, DAYS, getAllTimeSchedule, HOUR_STATUS } from '../controllers/tutor/tutorController';
 import Toast from 'react-native-toast-message';
 import { showToast } from '../util';
+import { sendEmail } from '../controllers/email/emailController';
 
 export default function RemoveAppointment() {
   const [schedules, setSchedules] = useState(undefined);
@@ -24,6 +25,14 @@ export default function RemoveAppointment() {
             setTimeSchedule(tutor, days)
               .then(() => {
                 showToast('success', 'Appointment Removed', 'The appointment was removed successfully!');
+
+                sendEmail(tutor, 'Appointment Cancelled', `Your appointment on ${day} at ${printTime} with ${student} was cancelled by the system admin!`)
+                  .then(() => {})
+                  .catch(err => console.error(err));
+                sendEmail(student, 'Appointment Cancelled', `Your appointment on ${day} at ${printTime} with ${tutor} was cancelled by the system admin!`)
+                  .then(() => {})
+                  .catch(err => console.error(err));
+
 
                 refreshSchedules();
               })
@@ -71,7 +80,7 @@ export default function RemoveAppointment() {
           appointments.push(
             <View key={`${schedule.id}-${status}-${day}-${hourText}`} style={styles.appointmentContainer}>
               <Text>
-                <Text style={{ fontWeight: 'bold' }}>{`${schedule.id}`}</Text> has an appointment with <Text style={{ fontWeight: 'bold' }}>{`${status}`}</Text> from <Text style={{ fontWeight: 'bold' }}>{`${hourText} ${hourTextSuffix}`} to {`${nextHourText} ${nextHourTextSuffix}`}</Text>
+                <Text style={{ fontWeight: 'bold' }}>{`${schedule.id}`}</Text> has an appointment with <Text style={{ fontWeight: 'bold' }}>{`${status}`}</Text> on { day } from <Text style={{ fontWeight: 'bold' }}>{`${hourText} ${hourTextSuffix}`} to {`${nextHourText} ${nextHourTextSuffix}`}</Text>
               </Text>
               <Button onPress={() => {
                 deleteAppointment(schedule.id, day, hourIndexText, printTime, status);

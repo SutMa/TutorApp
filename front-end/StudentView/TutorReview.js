@@ -2,6 +2,7 @@ import { useState } from "react";
 import { View, ScrollView, StyleSheet, Text, TextInput, Pressable, Dimensions } from "react-native";
 import ScrollPicker from 'react-native-wheel-scrollview-picker';
 import { createReview, reviewExists } from "../controllers/review/reviewController";
+import { sendEmail } from "../controllers/email/emailController";
 import { showToast } from '../util';
 import Toast from 'react-native-toast-message';
 
@@ -31,6 +32,8 @@ export default function TutorReview(props) {
 
         try{
             await createReview(user.email, tutorEmail, reviewText, reviewIndex + 1);
+            await sendEmail(tutorEmail, 'Review Created', `${user.email} gave you a ${reviewIndex + 1} star rating and said ${reviewText}!`);
+  
             showToast('success', 'Status', 'Review sent successfully!');
         } catch(err) {
             showToast('error', 'Unknown Error', 'An unknown error occurred!');

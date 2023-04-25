@@ -4,6 +4,7 @@ import { getAllTutors, getUserStorage, USER_DEFAULT_PROFILE_PIC_URI } from '../c
 import { DAYS, getTimeScheduleById, HOUR_STATUS, setTimeSchedule } from '../controllers/tutor/tutorController'; 
 import Toast from 'react-native-toast-message';
 import { showToast } from '../util';
+import { sendEmail } from '../controllers/email/emailController';
 
 export default function TutorList() {
     const [tutors, setTutors] = useState(undefined);
@@ -64,6 +65,13 @@ export default function TutorList() {
             setTimeSchedule(tutor, days)
               .then(() => {
                 showToast('success', 'Appointment Created', 'Your appointment was successfully created!');
+
+                sendEmail(user.email, 'Appointment Creation', `You appointment was succesfully created with ${tutorId} on ${day} at ${printTime}!`)
+                  .then(() => {})
+                  .catch(err => console.error(err));
+                sendEmail(tutorId, 'Appointment Creation', `${user.email} has scheduled an appointment with you on ${day} at ${printTime}!`)
+                  .then(() => {})
+                  .catch(err => console.error(err));
 
                 refreshSchedules();
               })

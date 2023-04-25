@@ -1,0 +1,11 @@
+1. When a user creates an account one email is sent to the user.
+2. When a student sets an appointment with a tutor one email is sent
+to the tutor and one email is sent to the student.
+3. When a user creates a review of a tutor one email gets sent to the
+tutor.
+4. When an admin removes an appointment one email gets sent to the tutor
+and one email gets sent to the student.
+5. When an admin creates an appointment one email gets sent to the tutor
+and one email gets sent to the student.
+6. Whena n admin edits an appointment one email gets sent to the tutor 
+and one email gets sent to the student.

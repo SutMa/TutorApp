@@ -49,7 +49,7 @@ export default function Appointments() {
                     let nextHourTextSuffix = (nextHour >= 12) ? 'PM' : 'AM';
 
                     myAppointmentsElement.push(
-                        <View style={styles.innerBox} key={`${day}-${currentHour}`}>
+                        <View style={styles.innerBox} key={`${id}-${day}-${currentHour}`}>
                           <Text style={styles.innerBoxText}>Tutor: { id }</Text>
                           <Text style={styles.innerBoxBoldText}>{capitolFirstLetter(day)} { hourText }:{ hourTextSuffix }-{ nextHourText }:{ nextHourTextSuffix }</Text>
                         </View>

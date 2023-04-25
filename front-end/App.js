@@ -15,6 +15,7 @@ import AddAppointment from './AdminView/AddAppointment';
 import RemoveAppointment from './AdminView/RemoveAppointment';
 import EditAppointment from './AdminView/EditAppointment';
 import Review from './View/Review';
+import EditUser from './AdminView/EditUser';
 
 const Stack = createStackNavigator();
 
@@ -54,7 +55,7 @@ function RootAdmin() {
       <Tab.Screen name={ADMIN_HOME_ROUTES.REMOVE_APPOINTMENT} component={RemoveAppointment} options={{ unmountOnBlur: true}} />
       <Tab.Screen name={ADMIN_HOME_ROUTES.ADD_APPOINTMENT} component={AddAppointment} />
       <Tab.Screen name={ADMIN_HOME_ROUTES.EDIT_APPOINTMENT} component={EditAppointment} />
-      <Tab.Screen name={ADMIN_HOME_ROUTES.PROFILE} component={Profile} />      
+      <Tab.Screen name={ADMIN_HOME_ROUTES.PROFILE} component={EditUser} />      
     </Tab.Navigator>
   )
 }
